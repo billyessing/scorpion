@@ -1,0 +1,36 @@
+
+
+$red-color: #DC3522;
+$sand-color: #D9CB9E;
+$teal-color: #374140;
+$grey-color: #2A2C2B;
+$charcoal-color: #1E1E20;
+
+// @function theme-color($key: "primary") {
+//     @return map-get($theme-colors, $key);
+// }
+
+// $theme-colors: (
+//     "primary": #334D5C,
+//     "info": #45B29D,
+//     "warning": #EFC94C,
+//     "danger": #DF5A49,
+//     "success": #5C832F,
+// );
+
+// $brand-primary:         theme-color("primary"); // #337ab7
+// $brand-success:         theme-color("success");
+// $brand-info:            theme-color("info");
+// $brand-warning:         theme-color("warning");
+// $brand-danger:          theme-color("danger");
+
+$blue:    #334D5C;
+$indigo:  #6f4ea3;
+$purple:  #553394;
+$pink:    #d679a4;
+$red:     #9e323c;
+$orange:  #c46416;
+$yellow:  #EFC94C;
+$green:   #4f9e61;
+$teal:    #2fa582;
+$cyan:    #0c7a8b;

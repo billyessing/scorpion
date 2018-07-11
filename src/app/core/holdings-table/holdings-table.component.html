@@ -1,0 +1,35 @@
+<div class="example-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search...">
+  </mat-form-field>
+</div>
+
+<mat-table #table [dataSource]="dataSource" matSort class="animate">
+
+    <ng-container matColumnDef="code">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Code </mat-header-cell>
+      <mat-cell *matCellDef="let transaction"> {{ transaction.code }} </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="purchasePrice">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Purchase price </mat-header-cell>
+      <mat-cell *matCellDef="let transaction"> 23 </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="volume">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Volume </mat-header-cell>
+      <mat-cell *matCellDef="let transaction"> {{ transaction.quantity }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="trade">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Trade </mat-header-cell>
+        <mat-cell *matCellDef="let transaction">
+          <button mat-raised-button  color="primary" (click)="openDialog(transaction)">Edit</button>
+        </mat-cell>
+    </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;" class="animate"></mat-row>
+</mat-table>

@@ -1,0 +1,70 @@
+<hr>
+<form
+  novalidate
+  [formGroup]="transactionForm"
+  (ngSubmit)="onSubmit()"
+  class="transaction">
+  <mat-form-field>
+    <mat-select
+      placeholder="Buy or sell?"
+      formControlName="type"
+      [(value)]="transaction.type">
+      <mat-option value="Buy">Buy</mat-option>
+      <mat-option value="Sell">Sell</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      autocomplete="off"
+      matInput
+      id="code"
+      formControlName="code"
+      required
+      type="text"
+      class="form-control"
+      placeholder="Company code..."
+      style="text-transform: uppercase">
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      autocomplete="off" 
+      matInput
+      id="qunatity"
+      formControlName="quantity"
+      required
+      type="text"
+      class="form-control"
+      placeholder="Quantity...">
+  </mat-form-field>
+  <button
+    mat-raised-button
+    [disabled]="transactionForm.invalid"
+    type="submit"
+    color="primary">Preview trade</button>
+</form>
+
+
+<div *ngIf="transactions?.length > 0">
+  <ul *ngFor="let transaction of transactions" class="collection">
+    <li class="collection-item"><strong>{{transaction.code}}: </strong> {{transaction.quantity}} <a>
+      <i (click)="editTransaction($event, transaction)" class="fa fa-pencil">Edit</i>
+      <i *ngIf="editState && transactionToEdit.id == transaction.id" (click)="clearState()" class="fa fa-compress"> / Close</i>
+    </a>
+
+    <div *ngIf="editState && transactionToEdit.id == transaction.id">
+      <form (ngSubmit)="updateTransaction(transaction)">
+          <div class="row">
+              <div class="input-field col s6">
+                <input type="text" placeholder="Add Title" [(ngModel)]="transaction.code" name="title">
+              </div>
+              <div class="input-field col s6">
+                <input type="text" placeholder="Add Description" [(ngModel)]="transaction.quantity" name="description">
+              </div>
+              <input type="submit" value="Update Item" class="btn orange">
+              <button (click)="deleteTransaction($event, transaction)" class="btn red">Delete Item</button>
+            </div>
+      </form>
+    </div>
+    </li>
+  </ul>
+</div>

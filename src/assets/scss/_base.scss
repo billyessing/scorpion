@@ -1,0 +1,35 @@
+#error-message {
+    color: $red;
+}
+
+/********************
+ * Forms
+ ********************/
+form .has-danger {
+    input[type="text"] {
+        @include formshadow($danger);
+    }
+}
+
+/********************
+ * Favorite Button
+ ********************/
+.favorite-button {
+
+    .is-disabled {
+        color: $black;
+    }
+    .is-not-favorite {
+        color: $yellow;
+    }
+    .is-favorite {
+        color: $red;
+        i {
+            background-color: $red;
+        }
+    }
+ }
+
+ .material-icons.red {
+     color: $red;
+ }

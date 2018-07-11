@@ -1,0 +1,14 @@
+// Boostrap
+@import '~bootstrap/scss/bootstrap';
+
+// Angular material
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+// Partials
+// @import 'partials/colors.vars.scss';
+// @import 'partials/fonts.vars.scss';
+
+input:focus {
+    outline:none;
+    box-shadow:none;
+}
