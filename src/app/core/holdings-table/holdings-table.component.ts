@@ -1,8 +1,7 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
-
-import { EditContentComponent } from './../edit-content/edit-content.component'
+import { ExistingSecurityComponent } from './../trades/existing-security/existing-security.component'
 
 @Component({
   selector: 'app-holdings-table',
@@ -19,9 +18,10 @@ export class HoldingsTableComponent implements AfterViewInit {
   constructor(private afs: AngularFirestore, public dialog: MatDialog) { }
 
   ngAfterViewInit() {
-    this.afs.collection<any>('transactions').valueChanges().subscribe(data => {
+    this.afs.collection<any>('holdings').valueChanges().subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
+      this.dataSource.sortingDataAccessor = (data, header) => data[header]
     })
   }
 
@@ -32,7 +32,7 @@ export class HoldingsTableComponent implements AfterViewInit {
   }
 
   openDialog(data): void {
-    const dialogRef = this.dialog.open(EditContentComponent, {
+    const dialogRef = this.dialog.open(ExistingSecurityComponent, {
       width: '350px',
       data: data
     });

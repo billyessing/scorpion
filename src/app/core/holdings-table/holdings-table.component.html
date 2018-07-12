@@ -8,25 +8,25 @@
 
     <ng-container matColumnDef="code">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Code </mat-header-cell>
-      <mat-cell *matCellDef="let transaction"> {{ transaction.code }} </mat-cell>
+      <mat-cell *matCellDef="let security"> {{ security.code }} </mat-cell>
     </ng-container>
 
 
     <ng-container matColumnDef="purchasePrice">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Purchase price </mat-header-cell>
-      <mat-cell *matCellDef="let transaction"> 23 </mat-cell>
+      <mat-cell *matCellDef="let security"> 23 </mat-cell>
     </ng-container>
 
 
     <ng-container matColumnDef="volume">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Volume </mat-header-cell>
-      <mat-cell *matCellDef="let transaction"> {{ transaction.quantity }} </mat-cell>
+      <mat-cell *matCellDef="let security"> {{ security.quantity }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="trade">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Trade </mat-header-cell>
-        <mat-cell *matCellDef="let transaction">
-          <button mat-raised-button  color="primary" (click)="openDialog(transaction)">Edit</button>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Trade? </mat-header-cell>
+        <mat-cell *matCellDef="let security">
+          <button mat-raised-button  color="primary" (click)="openDialog(security)">Edit</button>
         </mat-cell>
     </ng-container>
 

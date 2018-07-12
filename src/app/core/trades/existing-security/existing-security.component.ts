@@ -1,23 +1,22 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { FirestoreService } from './../../shared/services/firestore.service';
-import { Security } from './../../shared/models/security.model';
+import { FirestoreService } from './../../../shared/services/firestore.service';
+import { Security } from './../../../shared/models/security.model';
 
 @Component({
-  selector: 'app-edit-content',
-  templateUrl: './edit-content.component.html',
-  styleUrls: ['./edit-content.component.scss']
+  selector: 'app-existing-security',
+  templateUrl: './existing-security.component.html',
+  styleUrls: ['./existing-security.component.scss']
 })
-export class EditContentComponent {
-
+export class ExistingSecurityComponent {
   newEmail: string;
   newQuantity: number;
 
   constructor(
     private db: FirestoreService,
     private afs: AngularFirestore,
-    public dialogRef: MatDialogRef<EditContentComponent>,
+    public dialogRef: MatDialogRef<ExistingSecurityComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Security) { }
 
   onNoClick(): void {
@@ -44,4 +43,5 @@ export class EditContentComponent {
       quantity: this.data.quantity
     }));
   }
+
 }

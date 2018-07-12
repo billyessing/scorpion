@@ -49,7 +49,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { MakePostComponent } from './core/add-content/make-post/make-post.component';
-import { MakeTransactionComponent } from './core/add-content/make-transaction/make-transaction.component';
+import { MakeTradeComponent } from './core/add-content/make-trade/make-trade.component';
 import { HomeComponent } from './core/pages/home/home.component';
 
 // Services
@@ -59,6 +59,8 @@ import { FirestoreService } from './shared/services/firestore.service';
 import { environment } from '../environments/environment';
 import { HoldingsTableComponent } from './core/holdings-table/holdings-table.component';
 import { EditContentComponent } from './core/edit-content/edit-content.component';
+import { NewSecurityComponent } from './core/trades/new-security/new-security.component';
+import { ExistingSecurityComponent } from './core/trades/existing-security/existing-security.component';
 
 @NgModule({
   declarations: [
@@ -66,10 +68,12 @@ import { EditContentComponent } from './core/edit-content/edit-content.component
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    MakeTransactionComponent,
+    MakeTradeComponent,
     MakePostComponent,
     HoldingsTableComponent,
-    EditContentComponent
+    EditContentComponent,
+    NewSecurityComponent,
+    ExistingSecurityComponent
   ],
   imports: [
     BrowserModule,

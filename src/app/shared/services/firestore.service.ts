@@ -87,9 +87,9 @@ export class FirestoreService {
   set<T>(ref: DocPredicate<T>, data: any) {
     const timestamp = this.timestamp
     return this.doc(ref).set({
-      ...data,
-      updatedAt: timestamp,
-      createdAt: timestamp
+      ...data
+      // updatedAt: timestamp,
+      // createdAt: timestamp
     })
   }
 
@@ -107,9 +107,9 @@ export class FirestoreService {
   add<T>(ref: CollectionPredicate<T>, data) {
     const timestamp = this.timestamp
     return this.col(ref).add({
-      ...data,
-      updatedAt: timestamp,
-      createdAt: timestamp
+      ...data
+      // updatedAt: timestamp,
+      // createdAt: timestamp
     })
   }
 
