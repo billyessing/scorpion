@@ -68,7 +68,7 @@ export class FirestoreService {
   colWithIds$<T>(ref: CollectionPredicate<T>, queryFn?): Observable<any[]> {
     return this.col(ref, queryFn).snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
-        const data = a.payload.doc.data();
+        const data = a.payload.doc.data() as T;
         const id = a.payload.doc.id;
         return { id, data };
       });
@@ -87,17 +87,23 @@ export class FirestoreService {
   set<T>(ref: DocPredicate<T>, data: any) {
     const timestamp = this.timestamp
     return this.doc(ref).set({
-      ...data
-      // updatedAt: timestamp,
-      // createdAt: timestamp
+      ...data,
+      updatedAt: new Date(),
+      createdAt: timestamp
     })
   }
 
-  update<T>(ref: DocPredicate<T>, data: any) {
-    return this.doc(ref).update({
-      ...data,
-      updatedAt: this.timestamp
-    })
+  update<T>(ref: DocPredicate<T>, data: any, timestampUpdate: boolean) {
+    if (timestampUpdate) {
+      return this.doc(ref).update({
+        ...data,
+        updatedAt: this.timestamp
+      })
+    } else {
+      return this.doc(ref).update({
+        ...data
+      })
+    }
   }
 
   delete<T>(ref: DocPredicate<T>) {
@@ -107,9 +113,9 @@ export class FirestoreService {
   add<T>(ref: CollectionPredicate<T>, data) {
     const timestamp = this.timestamp
     return this.col(ref).add({
-      ...data
-      // updatedAt: timestamp,
-      // createdAt: timestamp
+      ...data,
+      updatedAt: timestamp,
+      createdAt: timestamp
     })
   }
 
@@ -165,7 +171,6 @@ export class FirestoreService {
   connect(host: DocPredicate<any>, key: string, doc: DocPredicate<any>) {
     return this.doc(host).update({ [key]: this.doc(doc).ref })
   }
-
 
   /// returns a documents references mapped to AngularFirestoreDocument
   docWithRefs$<T>(ref: DocPredicate<T>) {

@@ -1,3 +1,39 @@
-<p>
-  existing-security works!
-</p>
+<div class="security-expanded">
+  <div class="row security-expanded">
+
+    <!-- <div clas="col-md-4" style="margin-right:4em">
+      <img [src]="imgUrl">
+    </div> -->
+
+    <div clas="col-md-4">
+      <div class="security-box">
+        <div class="security-company"> Company Name... </div>
+        <div class="security-code"> {{ security.code }} </div>
+      </div>
+    </div>
+
+    <div clas="col-md-2" style="margin-right:4px">
+      <b>Open:</b> <br>
+      <b>Day high:</b> <br>
+      <b>Day low:</b> <br>
+      <b>Daily volume:</b> <br>
+    </div>
+    <div clas="col-md-2" style="margin-left:4px; margin-right:8em">
+      {{ security.open }} <br>
+      {{ security.high }}  <br>
+      {{ security.low }}  <br>
+      {{ security.volumeDaily.toLocaleString() }} <br>
+    </div>
+    <div clas="col-md-2" style="margin-right:4px">
+      <b>P/E:</b> <br>
+      <b>EPS:</b> <br>
+      <b>Annual divident yield:</b>
+    </div>
+    <div clas="col-md-2" style="margin-left:4px; margin-right:8em">
+      N/A <br>
+      N/A <br>
+      N/A
+    </div>
+  </div>
+</div>
+<!-- <button mat-raised-button (click)='tradeExistingShares()'>Click me</button> -->

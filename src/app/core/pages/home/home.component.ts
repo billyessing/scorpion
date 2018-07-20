@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SecurityDataService } from './../../../shared/services/security-data.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,12 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private securityData: SecurityDataService) {
+
+  }
 
   ngOnInit() {
 
   }
+
 }

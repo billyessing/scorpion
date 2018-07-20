@@ -2,7 +2,7 @@
 <form
   novalidate
   [formGroup]="tradeForm"
-  (ngSubmit)="onSubmit()"
+  (ngSubmit)="getDetails()"
   class="trade">
   <!-- <mat-form-field>
     <mat-select
@@ -30,7 +30,7 @@
       autocomplete="off"
       matInput
       id="qunatity"
-      formControlName="quantity"
+      formControlName="volume"
       required
       type="text"
       class="form-control"
@@ -38,7 +38,17 @@
   </mat-form-field>
   <button
     mat-raised-button
-    [disabled]="tradeForm.invalid"
-    type="submit"
+    (type)="submit"
+    (click)="getDetails()"
     color="primary">Preview trade</button>
+  <div class="row">
+    <p> price for the share {{code}} is {{price}}</p>
+    <button
+      mat-raised-button
+      [disabled]="tradeForm.invalid"
+      (type)="submit"
+      color="success">Make trade</button>
+
+  </div>
+
 </form>

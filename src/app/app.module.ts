@@ -48,8 +48,6 @@ import {
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
-import { MakePostComponent } from './core/add-content/make-post/make-post.component';
-import { MakeTradeComponent } from './core/add-content/make-trade/make-trade.component';
 import { HomeComponent } from './core/pages/home/home.component';
 
 // Services
@@ -58,9 +56,15 @@ import { FirestoreService } from './shared/services/firestore.service';
 // Other
 import { environment } from '../environments/environment';
 import { HoldingsTableComponent } from './core/holdings-table/holdings-table.component';
-import { EditContentComponent } from './core/edit-content/edit-content.component';
 import { NewSecurityComponent } from './core/trades/new-security/new-security.component';
 import { ExistingSecurityComponent } from './core/trades/existing-security/existing-security.component';
+
+import { CdkDetailRowDirective } from './core/holdings-table/cdk-detail-row.directive';
+
+import { SecurityInfoComponent } from './core/pages/security-info/security-info.component';
+import { PieChartComponent } from './core/charts/pie-chart/pie-chart.component';
+import { SearchBoxComponent } from './core/search-box/search-box.component';
+
 
 @NgModule({
   declarations: [
@@ -68,12 +72,13 @@ import { ExistingSecurityComponent } from './core/trades/existing-security/exist
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    MakeTradeComponent,
-    MakePostComponent,
     HoldingsTableComponent,
-    EditContentComponent,
     NewSecurityComponent,
-    ExistingSecurityComponent
+    ExistingSecurityComponent,
+    CdkDetailRowDirective,
+    SecurityInfoComponent,
+    PieChartComponent,
+    SearchBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -123,7 +128,8 @@ import { ExistingSecurityComponent } from './core/trades/existing-security/exist
     AppComponent
   ],
   entryComponents: [
-    EditContentComponent
+    ExistingSecurityComponent,
+    HoldingsTableComponent
   ]
 })
 export class AppModule { }

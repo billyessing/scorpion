@@ -1,35 +1,70 @@
 <div class="example-header">
   <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search...">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter holdings...">
   </mat-form-field>
 </div>
 
-<mat-table #table [dataSource]="dataSource" matSort class="animate">
+<div class="example-container mat-elevation-z8">
+	<mat-table [dataSource]="dataSource" matSort>
 
-    <ng-container matColumnDef="code">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Code </mat-header-cell>
-      <mat-cell *matCellDef="let security"> {{ security.code }} </mat-cell>
-    </ng-container>
+		<!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+		<ng-container matColumnDef="code">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> Code </mat-header-cell>
+			<mat-cell *matCellDef="let security"> {{ security.code }} </mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="purchasePrice">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> Purchase price </mat-header-cell>
+			<mat-cell *matCellDef="let security"> {{ security.purchasePrice }} </mat-cell>
+		</ng-container>
+
+    <ng-container matColumnDef="lastPrice">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> Last price </mat-header-cell>
+			<mat-cell *matCellDef="let security"> {{ security.lastPrice }} </mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="volume">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> Volume </mat-header-cell>
+			<mat-cell *matCellDef="let security"> {{ security.volume }} </mat-cell>
+		</ng-container>
+
+    <ng-container matColumnDef="value">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> Value </mat-header-cell>
+			<mat-cell *matCellDef="let security"> {{ security.value }} </mat-cell>
+		</ng-container>
+
+    <ng-container matColumnDef="gain">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> +/- </mat-header-cell>
+			<mat-cell *matCellDef="let security"> N/A </mat-cell>
+		</ng-container>
+
+    <ng-container matColumnDef="gainAsPercentage">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> % </mat-header-cell>
+			<mat-cell *matCellDef="let security"> N/A </mat-cell>
+		</ng-container>
+
+    <ng-container matColumnDef="updatedAt">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> Trade time </mat-header-cell>
+			<mat-cell *matCellDef="let security"> {{ security.updatedAt.toDate() | date:'medium' }} </mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="security-row" [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl">
+		</mat-row>
+	</mat-table>
+	<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+
+<ng-template #tpl let-security>
+	<div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+		<app-existing-security [security]="security"></app-existing-security>
+    <hr>
+	</div>
+</ng-template>
 
 
-    <ng-container matColumnDef="purchasePrice">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Purchase price </mat-header-cell>
-      <mat-cell *matCellDef="let security"> 23 </mat-cell>
-    </ng-container>
-
-
-    <ng-container matColumnDef="volume">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Volume </mat-header-cell>
-      <mat-cell *matCellDef="let security"> {{ security.quantity }} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="trade">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Trade? </mat-header-cell>
-        <mat-cell *matCellDef="let security">
-          <button mat-raised-button  color="primary" (click)="openDialog(security)">Edit</button>
-        </mat-cell>
-    </ng-container>
-
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;" class="animate"></mat-row>
-</mat-table>
+<!-- Copyright 2018 Google Inc. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->
