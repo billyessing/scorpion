@@ -1,0 +1,91 @@
+add-button:focus {
+    outline:none;
+    box-shadow:none;
+}
+
+.company-name {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.company-industry {
+  font-size: 15px;
+  opacity: 0.5;
+}
+
+.security-card {
+  margin-top: 3em;
+}
+
+.lineChart {
+  margin-top: 5em;
+}
+
+.image-box {
+  max-width: 200px;
+  max-height: 200px;
+  margin-top: 0.1em;
+  margin-right: 2em;
+}
+
+.image-box img {
+  width: 100%;
+  height: auto;
+  // margin-top: 50%;
+  // margin-bottom: 50%;
+}
+
+.vertical-line {
+  height: 200px;
+  width: 1px;
+  margin-right: 1.5em;
+  // border-left: solid #000000
+  border-color: #000000;
+}
+
+.mat-form-field {
+  padding-right: 2em;
+  min-width: 150px;
+  max-width: 400px;
+  width: 100%;
+  left: 23%;
+}
+
+.search-button {
+  left: 23%;
+  background-color: #001f3f;
+  color: white;
+}
+
+.security-details {
+  margin-top: 10px;
+  margin-left: 1px;
+  font-size: 15px;
+}
+
+.security-box {
+  width: 200px;
+  height: 200px;
+  margin-left: 0.5em;
+  margin-top: 0.1em;
+  margin-right: 2em;
+  border: 2px solid black;
+}
+
+.security-box span {
+  font-size: 60px;
+  font-weight: bold;
+  position: relative;
+  float: left;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.add-button {
+  font-weight: normal;
+}
+
+.add-button:hover {
+  text-decoration: underline;
+}

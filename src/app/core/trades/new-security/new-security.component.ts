@@ -22,12 +22,10 @@ export class NewSecurityComponent implements OnInit {
   @ViewChild(FormGroupDirective) fgDirective;
 
   tradeForm: FormGroup;
-  tradeFormCode: FormControl;
-  tradeFormVolume: FormControl;
-  tradeFormPurchasePrice: FormControl;
+  code: FormControl;
+  volume: FormControl;
+  purchasePrice: FormControl;
 
-  price: number;
-  code: string;
   previewed = false;
 
   constructor(
@@ -41,61 +39,61 @@ export class NewSecurityComponent implements OnInit {
   }
 
   createFormControls() {
-    this.tradeFormCode = new FormControl('', [
+    this.code = new FormControl('', [
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(3)
     ]);
-    this.tradeFormVolume = new FormControl('', [
+    this.volume = new FormControl('', [
       Validators.required
     ]);
   }
 
   createForm() {
     this.tradeForm = new FormGroup({
-      code: this.tradeFormCode,
-      volume: this.tradeFormVolume,
+      code: this.code,
+      volume: this.volume,
       purchasePrice: new FormControl(),
     });
   }
 
   getDetails() {
-    let security = this.tradeForm.get('code').value;
-    console.log(security)
-    this.code = security.toUpperCase();
+    let code = this.tradeForm.get('code').value.toUpperCase();
+    let volume = this.tradeForm.get('volume').value
 
-    this.securityData.getSecurityData(security)
+    this.securityData.getSecurityData(code)
       .subscribe(data => {
         let price = data['close']
-        return this.setPrice(price)
+        return this.setPrice(code, volume, price)
       },
       err => {
         console.log('ERROR: failed to retrieve security price')
-        return this.setPrice(-1)
-      },
-      () => console.log("successfully retrieved security price...")
-      )
+        return this.setPrice(code, volume, -1)
+      })
   }
 
-  setPrice(securityPrice: number) {
-    if (securityPrice !== -1) {
-      console.log('preview: ' + securityPrice)
-      this.price = securityPrice;
+  setPrice(code: string, volume: number, price: number) {
+    if (price !== -1) {
       this.previewed = true
+      return this.onSubmit(code, volume, price);
     } else {
       return "N/A";
     }
   }
 
-  onSubmit() {
-    let code = this.tradeForm.get('code').value.toUpperCase();
-    // this.getDetails(code)
+  onSubmit(code: string, volume: number, price: number) {
+    this.tradeForm.patchValue({
+      code: code,
+      volume: Number(volume),
+      purchasePrice: Number(price)
+    });
 
-    console.log("submit: " + this.price)
-    this.tradeForm.patchValue({ code: code, purchasePrice: this.price });
+    console.log("code: " + this.tradeForm.get('code').value);
+    console.log("volume: " + this.tradeForm.get('volume').value);
+    console.log("price: " + this.tradeForm.get('purchasePrice').value);
 
     // Used set to override the provided autoID by firestore
-    // this.db.set<Security>(`holdings/${code}`, this.tradeForm.value);
+    this.db.set<Security>(`holdings/${code}`, this.tradeForm.value);
     this.fgDirective.resetForm();
   }
 

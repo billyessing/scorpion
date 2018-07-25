@@ -40,3 +40,21 @@
 .mat-header-cell {
   font-weight: bold;
 }
+
+.gains-class {
+  padding-left: 10px;
+}
+
+.dates-col {
+  padding-left: 10px;
+}
+
+.gains-class-positive {
+  padding-left: 10px;
+  background-color:rgba(75,181,67,0.3);
+}
+
+.gains-class-negative {
+  padding-left: 10px;
+  background-color:rgba(255,0,0,0.3);
+}

@@ -1,6 +1,6 @@
 <div class="example-header">
   <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter holdings...">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search in holdings...">
   </mat-form-field>
 </div>
 
@@ -17,12 +17,12 @@
 
 		<ng-container matColumnDef="purchasePrice">
 			<mat-header-cell *matHeaderCellDef mat-sort-header> Purchase price </mat-header-cell>
-			<mat-cell *matCellDef="let security"> {{ security.purchasePrice }} </mat-cell>
+			<mat-cell *matCellDef="let security"> {{ security.purchasePrice | number:'1.3-3' }} </mat-cell>
 		</ng-container>
 
     <ng-container matColumnDef="lastPrice">
 			<mat-header-cell *matHeaderCellDef mat-sort-header> Last price </mat-header-cell>
-			<mat-cell *matCellDef="let security"> {{ security.lastPrice }} </mat-cell>
+			<mat-cell *matCellDef="let security"> {{ security.lastPrice | number:'1.3-3' }} </mat-cell>
 		</ng-container>
 
 		<ng-container matColumnDef="volume">
@@ -32,22 +32,28 @@
 
     <ng-container matColumnDef="value">
 			<mat-header-cell *matHeaderCellDef mat-sort-header> Value </mat-header-cell>
-			<mat-cell *matCellDef="let security"> {{ security.value }} </mat-cell>
+			<mat-cell *matCellDef="let security"> {{ security.value | number:'1.2-2' }} </mat-cell>
 		</ng-container>
 
     <ng-container matColumnDef="gain">
-			<mat-header-cell *matHeaderCellDef mat-sort-header> +/- </mat-header-cell>
-			<mat-cell *matCellDef="let security"> N/A </mat-cell>
+			<mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'gains-class'"> +/- </mat-header-cell>
+			<mat-cell
+        *matCellDef="let security"
+        [ngClass]="{'gains-class-positive' : security.gain > 0, 'gains-class-negative' : security.gain < 0}"> {{ security.gain | number:'1.3-3' }}
+      </mat-cell>
 		</ng-container>
 
     <ng-container matColumnDef="gainAsPercentage">
-			<mat-header-cell *matHeaderCellDef mat-sort-header> % </mat-header-cell>
-			<mat-cell *matCellDef="let security"> N/A </mat-cell>
+			<mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'gains-class'"> % </mat-header-cell>
+			<mat-cell
+        *matCellDef="let security"
+        [ngClass]="{'gains-class-positive' : security.gain > 0, 'gains-class-negative' : security.gain < 0}"> {{ security.gainAsPercentage | number:'1.3-3' }}
+      </mat-cell>
 		</ng-container>
 
     <ng-container matColumnDef="updatedAt">
-			<mat-header-cell *matHeaderCellDef mat-sort-header> Trade time </mat-header-cell>
-			<mat-cell *matCellDef="let security"> {{ security.updatedAt.toDate() | date:'medium' }} </mat-cell>
+			<mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'gains-class'"> Trade time </mat-header-cell>
+			<mat-cell *matCellDef="let security" [ngClass]="'dates-col'"> {{ security.updatedAt.toDate() | date:'medium' }} </mat-cell>
 		</ng-container>
 
 		<mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
@@ -60,11 +66,6 @@
 <ng-template #tpl let-security>
 	<div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
 		<app-existing-security [security]="security"></app-existing-security>
-    <hr>
+    <!-- <hr> -->
 	</div>
 </ng-template>
-
-
-<!-- Copyright 2018 Google Inc. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license -->

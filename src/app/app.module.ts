@@ -64,6 +64,7 @@ import { CdkDetailRowDirective } from './core/holdings-table/cdk-detail-row.dire
 import { SecurityInfoComponent } from './core/pages/security-info/security-info.component';
 import { PieChartComponent } from './core/charts/pie-chart/pie-chart.component';
 import { SearchBoxComponent } from './core/search-box/search-box.component';
+import { LineChartComponent } from './core/charts/line-chart/line-chart.component';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { SearchBoxComponent } from './core/search-box/search-box.component';
     CdkDetailRowDirective,
     SecurityInfoComponent,
     PieChartComponent,
-    SearchBoxComponent
+    SearchBoxComponent,
+    LineChartComponent
   ],
   imports: [
     BrowserModule,

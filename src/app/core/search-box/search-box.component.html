@@ -1,20 +1,18 @@
-<!-- <form
-  class="example-form"
-  (ngSubmit)="navigateToUrl()"
-  [formGroup]="searchForm">
-
-  <mat-form-field class="example-full-width">
+<form>
+  
+  <mat-form-field>
     <input
       type="text"
       placeholder="Search for company..."
       matInput
-      formControlName="companyName"
-      [matAutocomplete]="auto">
+      type="text"
+      [matAutocomplete]="auto"
+      [formControl]="companySearchControl">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
       <mat-option
-        *ngFor="let option of filteredOptions | async"
-        [value]="option">
-        {{option}}
+        *ngFor="let company of filteredOptions | async"
+        [value]="company">
+        {{ company }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
@@ -22,19 +20,8 @@
   <button
     class="search-button"
     mat-raised-button
-    (type)="submit"
+    (click)="navigateToUrl()"
     color="primary">Search
   </button>
-</form> -->
 
-<form>
-<mat-form-field>
-<input matInput [matAutocomplete]="auto" [formControl]="myControl">
-<mat-autocomplete #auto="matAutocomplete">
-  <mat-option *ngFor="let user of filteredOptions | async"
-    [value]="user.name">
-    <span>{{ user.name }}</span>
-  </mat-option>
-</mat-autocomplete>
-</mat-form-field>
 </form>

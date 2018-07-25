@@ -1,13 +1,16 @@
 import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatPaginator, MatSort, MatTableDataSource, MatSortable } from '@angular/material';
-import { FirestoreService } from './../../shared/services/firestore.service';
-import { SecurityDataService } from './../../shared/services/security-data.service';
-import { ExistingSecurityComponent } from './../trades/existing-security/existing-security.component';
-import { Security } from './../../shared/models/security.model';
+
+import 'rxjs/Rx';
 import { map, take, tap, filter, scan  } from 'rxjs/operators';
 import { Observable, Observer, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
-import 'rxjs/Rx';
+
+import { ExistingSecurityComponent } from './../trades/existing-security/existing-security.component';
+import { FirestoreService } from './../../shared/services/firestore.service';
+import { SecurityDataService } from './../../shared/services/security-data.service';
+import { Security } from './../../shared/models/security.model';
+
 
 @Component({
   selector: 'app-holdings-table',
@@ -35,8 +38,8 @@ export class HoldingsTableComponent implements OnInit {
     private securityData: SecurityDataService) { }
 
   ngOnInit() {
-    this.getSecurityData();
     this.getPortfolio();
+    this.getSecurityData();
     this.preSort();
   }
 
@@ -49,6 +52,7 @@ export class HoldingsTableComponent implements OnInit {
       })
   }
 
+  // presort table by last updated
   preSort() {
     this.sort.sort(<MatSortable>{
         id: 'updatedAt',
@@ -57,33 +61,48 @@ export class HoldingsTableComponent implements OnInit {
     );
   }
 
+  // holdings table search bar
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
+  // uses security data api to fetch real time data
+  // (can't handle > ~6 concurrent api calls) ... needs work
   getSecurityData() {
     this.db.col$<Security>('holdings')
       .subscribe(col => {
         col.forEach(security => {
-          this.securityData.getSecurityData(security.code)
-            .subscribe(securityData => {
-              return this.updateSecurity(security, securityData)
-            },
-            err => console.log('ERROR: failed to retrieve live portfolio data'),
-            () => console.log('successfully retrieved portfolio data...'))
-        })
+          // checks if last price is undefined or null
+          // i.e. if the stock was just added
+          if (security.code == 'PLS') {
+            console.log(security.code);
+            this.securityData.getSecurityData(security.code)
+              .subscribe(data => {
+
+                return this.updateSecurity(security, data)
+              },
+              err => console.log('ERROR: failed to retrieve data for ' + security.code),
+              () => console.log('successful for: ' + security.code)
+            )}
+          }
+        )
       })
   }
 
+  // update data in firestore
   updateSecurity(security: Security, securityData: {}) {
     let open = securityData['open'];
     let high = securityData['high'];
     let low = securityData['low'];
     let lastPrice = securityData['close'];
     let volumeDaily = securityData['volume'];
-    let value = (lastPrice * security.volume).toFixed(2)
+
+    // calculations
+    let value = Number((lastPrice) * security.volume)
+    let gain = ((lastPrice - security.purchasePrice) * security.volume)
+    let gainAsPercentage = ((gain) * 100 / (security.purchasePrice * security.volume))
 
     this.db.update(`holdings/${security.code}`, ({
       lastPrice: Number(lastPrice),
@@ -91,7 +110,9 @@ export class HoldingsTableComponent implements OnInit {
       high: Number(high),
       low: Number(low),
       volumeDaily: Number(volumeDaily),
-      value: Number(value)
+      value: Number(value),
+      gain: Number(gain),
+      gainAsPercentage: Number(gainAsPercentage)
     }), false);
   }
 }

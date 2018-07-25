@@ -1,3 +1,51 @@
-<p>
-  security-info works!
-</p>
+<mat-card class="security-card">
+  <div class="row">
+
+    <!-- <div *ngIf="imageExists(getImage(securityCode)); else noImage" class="col image-box">
+      <img [src]="getImage(securityCode)" (error)="updateFlag()">
+    </div> -->
+    <!-- <ng-template #noImage> -->
+      <div class="security-box">
+        <span>{{ securityCode.toUpperCase() }}</span>
+      </div>
+    <!-- </ng-template> -->
+    <div class="col">
+      <span class="company-name">{{ companyName }}</span>
+      <br>
+      <span class="company-industry">Industry: {{ companyIndustry }}</span>
+      <hr>
+      <div class="row security-details">
+
+        <div clas="col-md-2" style="margin-right: 4px; font-size: 14px">
+          <b>Open:</b> <br>
+          <b>Day high:</b> <br>
+          <b>Day low:</b> <br>
+          <b>Daily volume:</b> <br>
+        </div>
+        <div clas="col-md-2" style="margin-left: 4px; margin-right: 8em; font-size: 15px">
+          {{ securityOpen | number:'1.3-3' }} <br>
+          {{ securityHigh | number:'1.3-3' }}  <br>
+          {{ securityLow | number:'1.3-3' }}  <br>
+          {{ securityVolume | number }} <br>
+        </div>
+        <div clas="col-md-2" style="margin-right: 4px; font-size: 14px">
+          <b>P/E:</b> <br>
+          <b>EPS:</b> <br>
+          <b>Annual divident yield:</b>
+        </div>
+        <div clas="col-md-2" style="margin-left: 4px; font-size: 15px">
+          N/A <br>
+          N/A <br>
+          N/A
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <mat-card-actions>
+    <button class="add-button" mat-button style="margin-left: 23px;">ADD TO PORTFOLIO</button>
+  </mat-card-actions>
+</mat-card>
+
+<app-line-chart [securityCode]="securityCode"></app-line-chart>

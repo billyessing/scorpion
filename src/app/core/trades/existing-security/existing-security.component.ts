@@ -18,7 +18,6 @@ export class ExistingSecurityComponent implements OnInit {
   @Input() security: Security;
   imgUrl: string;
 
-
   constructor(private db: FirestoreService) {
 
   }

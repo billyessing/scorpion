@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subject, from } from 'rxjs';
-import { catchError, map, tap,startWith, switchMap, debounceTime, distinctUntilChanged, takeWhile, first } from 'rxjs/operators';
-import { FormGroup, FormGroupDirective, FormControl, FormBuilder, Validators } from '@angular/forms';
-
-const filePath = './../assets/company-codes/company-codes.csv';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { CsvParserService } from './../../shared/services/csv-parser.service';
 
 @Component({
   selector: 'app-search-box',
@@ -13,24 +12,29 @@ const filePath = './../assets/company-codes/company-codes.csv';
 })
 export class SearchBoxComponent implements OnInit {
 
-  searchForm: FormGroup;
-  searchControl = new FormControl();
-
-  companyList: string[] = [];
-
-  // options: string[] = ['One', 'Two', 'Three'];
-  // filteredOptions: Observable<string[]>;
-
-
-  // testing
-  myControl = new FormControl();
+  companySearchControl = new FormControl();
   filteredOptions: Observable<any[]>;
 
-  constructor(private router: Router) {
-    this.filteredOptions = this.myControl.valueChanges
+  constructor(
+    private csvService: CsvParserService,
+    private router: Router) { }
+
+
+  ngOnInit() {
+    this.filterOptions();
+  }
+
+  navigateToUrl() {
+    let companyName = this.companySearchControl.value.toLowerCase();
+    let companyCode = companyName.slice(-4, -1);
+    this.router.navigateByUrl('/share/' + companyCode);
+  }
+
+  filterOptions() {
+    this.filteredOptions = this.companySearchControl.valueChanges
       .pipe(
         startWith(null),
-        debounceTime(200),
+        debounceTime(100),
         distinctUntilChanged(),
         switchMap(val => {
           return this.filter(val || '')
@@ -38,55 +42,12 @@ export class SearchBoxComponent implements OnInit {
       )
   }
 
-  filter(val: string): Observable<any[]> {
-    return this.parseCsv()
-      .pipe(
-        map(res => res.filter(option => {
-          return option.toLowerCase().indexOf(val.toLowerCase()) === 0
-        }))
-      )
-  }
-
-  ngOnInit() {
-    this.searchForm = new FormGroup({
-      companyName: new FormControl()
-    })
-    console.log(this.parseCsv())
-    // this.filterOptions();
-  }
-
-  navigateToUrl() {
-    let search = this.searchForm.get('companyName').value.toLowerCase()
-    this.router.navigateByUrl('/share/' + search);
-  }
-
-  parseCsv() {
-    return from(fetch(filePath)
-      .then(response => response.text())
-      .then(text => {
-        let stripped = text.replace(/"/g,"");
-        let companies = stripped.split("\n")
-
-        companies.forEach(coy => {
-          let tokens = coy.split(",")
-          this.companyList = this.companyList.concat(tokens)
-        });
-
-        return this.companyList
+  filter(value: string): Observable<any[]> {
+    return this.csvService.getNamesWithCodes()
+      .pipe(map(res => res.filter(option => {
+        return option.toLowerCase().includes(value)
       }))
+    )
   }
 
-
-
-  // filterOptions() {
-  //   this.filteredOptions = this.searchControl.valueChanges.pipe(
-  //     startWith(''),
-  //     map(value => this.filter(value))
-  //   );
-  // }
-  //
-  // filter(value: string): Observable<any[]> {
-  //   const filterValue = value.toLowerCase();
-  //   return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
-  // }
 }
