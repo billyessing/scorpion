@@ -1,30 +1,5 @@
 <mat-card style="margin-top: 2em;">
 
-    <mat-button-toggle-group #group="matButtonToggleGroup" [value]="timePeriod">
-      <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1day">
-        1 day
-      </mat-button-toggle>
-      <mat-button-toggle (click)="updateTimePeriod(group.value)" value="5days">
-        5 days
-      </mat-button-toggle>
-      <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1month">
-        1 month
-      </mat-button-toggle>
-      <mat-button-toggle (click)="updateTimePeriod(group.value)" value="3months">
-        3 months
-      </mat-button-toggle>
-      <mat-button-toggle (click)="updateTimePeriod(group.value)" value="6months">
-        6 months
-      </mat-button-toggle>
-      <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1year">
-        1 year
-      </mat-button-toggle>
-      <mat-button-toggle (click)="updateTimePeriod(group.value)" value="5year">
-        5 years
-      </mat-button-toggle>
-
-    </mat-button-toggle-group>
-
     <!-- <mat-card-actions>
       <button mat-button-toggle>1 day</button>
       <button mat-button>5 days</button>
@@ -32,8 +7,35 @@
 
     <!-- <div class="example-selected-value">Selected value: {{group.value}}</div> -->
 
-    <div style="display: block">
+    <div *ngIf="lineChart" style="display: block">
+      <mat-button-toggle-group #group="matButtonToggleGroup" [value]="timePeriod">
+        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1day">
+          1 day
+        </mat-button-toggle>
+        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="5days">
+          5 days
+        </mat-button-toggle>
+        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1month">
+          1 month
+        </mat-button-toggle>
+        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="3months">
+          3 months
+        </mat-button-toggle>
+        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="6months">
+          6 months
+        </mat-button-toggle>
+        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1year">
+          1 year
+        </mat-button-toggle>
+        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="5year">
+          5 years
+        </mat-button-toggle>
+      </mat-button-toggle-group>
       <canvas class="lineChart" id="lineChart"></canvas>
+    </div>
+
+    <div *ngIf="!lineChart">
+      <span style="text-align: center;"> Could not retrieve data... </span>
     </div>
 
 </mat-card>

@@ -1,0 +1,20 @@
+<div style="text-align: center;">
+  <h1 mat-dialog-title style="font-size: 40px;">{{ data.code.toUpperCase() }}</h1>
+  <p style="font-size: 20px;">{{ data.name }}<p>
+  <hr>
+  <div mat-dialog-content>
+    <mat-form-field style="font-size: 16px; width: 112px; text-align: center;">
+      <input matInput [(ngModel)]="volume" placeholder="Enter quantity..." autocomplete="off">
+    </mat-form-field>
+    <br>
+  </div>
+  <p style="font-size: 17px;">at <b>${{ data.price | number:'1.3-3' }} </b>per share</p>
+  <div style="margin-top: 2em; margin-bottom: 2em; font-size: 22px;">
+    <p>Total cost:
+      <span *ngIf="volume">${{ getCost() | number:'1.2-2' }}</span>
+      <span *ngIf="!volume">$0.00</span>
+    </p>
+  </div>
+  <button class="btn-cancel" mat-button (click)="onCancel()">Cancel</button>
+  <button class="btn-confirm" [disabled]="!(getCost() > 0)" mat-button cdkFocusInitial (click)="onConfirm()">Confirm</button>
+<div>

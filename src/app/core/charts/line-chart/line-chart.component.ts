@@ -17,8 +17,9 @@ export class LineChartComponent implements OnInit {
 
   @Input() securityCode: string;
 
-  timePeriod: string;
   lineChart: any;
+  // default value
+  timePeriod: string = '5day';
 
   constructor(
     private securityService: SecurityDataService,
@@ -26,21 +27,20 @@ export class LineChartComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.timePeriod = '1day';
     this.getLineChartData(this.timePeriod);
   }
 
   updateTimePeriod(timePeriod: string) {
-    console.log(this.timePeriod);
-    console.log(timePeriod);
+    this.lineChart.destroy();
     this.getLineChartData(timePeriod);
+    // this.lineChart.update();
   }
 
   getLineChartData(timePeriod) {
     this.securityService.getHistoricalSecurityData(this.securityCode, timePeriod)
       .subscribe(data => {
 
-        let canvas = <HTMLCanvasElement> document.getElementById("lineChart");
+        let canvas = <HTMLCanvasElement>document.getElementById("lineChart");
         let ctx = canvas.getContext("2d");
 
         this.lineChart = new Chart(ctx, {
@@ -74,7 +74,7 @@ export class LineChartComponent implements OnInit {
               }],
               yAxes: [{
                 ticks: {
-                  suggestedMin: (Math.min(...data['prices']) * 0.995),
+                  suggestedMin: (Math.min(...data['prices']) * 0.998),
                 },
                 gridLines: {
                   lineWidth: 0.4
@@ -83,7 +83,9 @@ export class LineChartComponent implements OnInit {
             }
           }
         });
-      })
+      },
+      err => console.log("could not fetch data...")
+    )
   }
 
   getColor(ctx, data: number[]): any {

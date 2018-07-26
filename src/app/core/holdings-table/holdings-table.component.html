@@ -1,3 +1,4 @@
+<div class="holdings-header">Current holdings</div>
 <div class="example-header">
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search in holdings...">
@@ -52,7 +53,7 @@
 		</ng-container>
 
     <ng-container matColumnDef="updatedAt">
-			<mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'gains-class'"> Trade time </mat-header-cell>
+			<mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'gains-class'"> Added </mat-header-cell>
 			<mat-cell *matCellDef="let security" [ngClass]="'dates-col'"> {{ security.updatedAt.toDate() | date:'medium' }} </mat-cell>
 		</ng-container>
 

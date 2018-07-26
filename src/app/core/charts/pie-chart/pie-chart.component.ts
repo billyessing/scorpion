@@ -29,7 +29,6 @@ export class PieChartComponent implements OnInit {
     this.getPieChartData();
   }
 
-
   getPieChartData() {
     this.db.col$<Security>('holdings')
       .subscribe(col => {

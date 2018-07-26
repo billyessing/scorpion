@@ -73,7 +73,9 @@ export class SecurityDataService {
         this.securityData.volume = keys[securityEnum.volume];
 
         return this.securityData;
-      })
+      },
+      err => console.log("sds.getSecurityData() could not fetch data...")
+    )
   }
 
   getHistoricalSecurityData(code: string, timePeriod: string): Observable<{}> {
@@ -119,7 +121,23 @@ export class SecurityDataService {
         this.securityPriceHistory.dates = dates;
 
         return this.securityPriceHistory;
-      })
+      },
+      err => console.log("sds.getHistoricalSecurityData() could not fetch data...")
+    )
+  }
+
+  getTimePeriod(keys: string[], timePeriod: string): string[] {
+    if (timePeriod === '1day') {
+      let index = this.getStartTimeIntraday(keys);
+      return keys.slice(0, index).reverse();
+    }
+
+    if (timePeriod === '5days') { return keys.slice(1, 6).reverse(); }
+    if (timePeriod === '1month') { return keys.slice(1, 24).reverse(); }
+    if (timePeriod === '3months') { return keys.slice(1, (22 * 3)).reverse(); }
+    if (timePeriod === '6months') { return keys.slice(1, (22 * 6)).reverse(); }
+    if (timePeriod === '1year') { return keys.slice(1, (22 * 12)).reverse(); }
+    if (timePeriod === '5years') { return keys.slice(1, (5 * 12)).reverse(); }
   }
 
   getTimeSeries(timePeriod): string {
@@ -127,8 +145,11 @@ export class SecurityDataService {
       return 'intradayFifteen';
     }
 
-    if (timePeriod === '5days' || timePeriod === '1month' || timePeriod === '3months' ||
-          timePeriod === '6months' || timePeriod === '1year') {
+    if (timePeriod === '5days' ||
+        timePeriod === '1month' ||
+        timePeriod === '3months' ||
+        timePeriod === '6months' ||
+        timePeriod === '1year') {
       return 'daily';
     }
 
@@ -138,35 +159,14 @@ export class SecurityDataService {
   }
 
   getOutputSize(timePeriod): string {
-    if (timePeriod === '1day' || timePeriod === '5days' ||
-          timePeriod === '1month' || timePeriod === '3months') {
+    if (timePeriod === '1day' ||
+        timePeriod === '5days' ||
+        timePeriod === '1month' ||
+        timePeriod === '3months') {
       return 'compact'
     } else {
       return 'full'
     }
-  }
-
-  getTimePeriod(keys: string[], timePeriod: string): string[] {
-    let ret = []
-
-    if (timePeriod === '1day') {
-      let index = this.getStartTimeIntraday(keys);
-      return keys.slice(0, index).reverse();
-    }
-
-    if (timePeriod === '5days') { return keys.slice(1, 6).reverse(); }
-
-    if (timePeriod === '1month') { return keys.slice(1, 24).reverse(); }
-
-    if (timePeriod === '3months') { return keys.slice(1, (22 * 3)).reverse(); }
-
-    if (timePeriod === '6months') { return keys.slice(1, (22 * 6)).reverse(); }
-
-    if (timePeriod === '1year') { return keys.slice(1, (22 * 12)).reverse(); }
-
-    if (timePeriod === '5years') { return keys.slice(1, (5 * 12)).reverse(); }
-
-    return ret = []
   }
 
   // convert US/Eastern time to user timezone
@@ -174,8 +174,10 @@ export class SecurityDataService {
     date.replace("/", "-");
     date.replace(" ", "T")
     date = new Date(Date.parse(date)).toUTCString()
+
     let tokens = date.split(' ');
     let trunc = tokens[4].substring(0,5)
+
     return trunc;
   }
 

@@ -62,9 +62,12 @@ import { ExistingSecurityComponent } from './core/trades/existing-security/exist
 import { CdkDetailRowDirective } from './core/holdings-table/cdk-detail-row.directive';
 
 import { SecurityInfoComponent } from './core/pages/security-info/security-info.component';
+// import { DialogOverviewExampleDialog } from './core/pages/security-info/security-info.component';
+
 import { PieChartComponent } from './core/charts/pie-chart/pie-chart.component';
 import { SearchBoxComponent } from './core/search-box/search-box.component';
 import { LineChartComponent } from './core/charts/line-chart/line-chart.component';
+import { AddSecurityComponent } from './core/trades/add-security/add-security.component';
 
 
 @NgModule({
@@ -80,7 +83,9 @@ import { LineChartComponent } from './core/charts/line-chart/line-chart.componen
     SecurityInfoComponent,
     PieChartComponent,
     SearchBoxComponent,
-    LineChartComponent
+    LineChartComponent,
+    // DialogOverviewExampleDialog,
+    AddSecurityComponent
   ],
   imports: [
     BrowserModule,
@@ -131,7 +136,8 @@ import { LineChartComponent } from './core/charts/line-chart/line-chart.componen
   ],
   entryComponents: [
     ExistingSecurityComponent,
-    HoldingsTableComponent
+    HoldingsTableComponent,
+    AddSecurityComponent
   ]
 })
 export class AppModule { }

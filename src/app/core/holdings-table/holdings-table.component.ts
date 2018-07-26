@@ -76,7 +76,7 @@ export class HoldingsTableComponent implements OnInit {
         col.forEach(security => {
           // checks if last price is undefined or null
           // i.e. if the stock was just added
-          if (security.code == 'PLS') {
+          if (security.lastPrice == null) {
             console.log(security.code);
             this.securityData.getSecurityData(security.code)
               .subscribe(data => {
@@ -85,9 +85,9 @@ export class HoldingsTableComponent implements OnInit {
               },
               err => console.log('ERROR: failed to retrieve data for ' + security.code),
               () => console.log('successful for: ' + security.code)
-            )}
-          }
-        )
+              )
+            }
+          })
       })
   }
 

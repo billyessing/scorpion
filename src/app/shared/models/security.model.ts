@@ -2,6 +2,7 @@ export class Security {
   constructor (
     public code: string,
     public companyName: string,
+    public industry: string,
     public purchasePrice: number,
     public lastPrice: number,
     public open: number,
