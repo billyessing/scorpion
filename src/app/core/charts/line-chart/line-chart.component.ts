@@ -8,6 +8,11 @@ import { Chart } from 'chart.js';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
+const timePeriods = [
+  '1day', '5days', '1month',
+  '3months', '6months', '1year', '5year'
+];
+
 @Component({
   selector: 'app-line-chart',
   templateUrl: './line-chart.component.html',
@@ -19,7 +24,7 @@ export class LineChartComponent implements OnInit {
 
   lineChart: any;
   // default value
-  timePeriod: string = '5day';
+  timePeriod: string = '1day';
 
   constructor(
     private securityService: SecurityDataService,
@@ -30,9 +35,14 @@ export class LineChartComponent implements OnInit {
     this.getLineChartData(this.timePeriod);
   }
 
-  updateTimePeriod(timePeriod: string) {
-    this.lineChart.destroy();
-    this.getLineChartData(timePeriod);
+  updateTimePeriod(tab: any) {
+    let timePeriod = timePeriods[tab['index']]
+
+    if (this.lineChart) {
+      this.lineChart.destroy();
+      this.lineChart = null;
+      this.getLineChartData(timePeriod);
+    }
     // this.lineChart.update();
   }
 
@@ -40,7 +50,7 @@ export class LineChartComponent implements OnInit {
     this.securityService.getHistoricalSecurityData(this.securityCode, timePeriod)
       .subscribe(data => {
 
-        let canvas = <HTMLCanvasElement>document.getElementById("lineChart");
+        let canvas = <HTMLCanvasElement> document.getElementById("lineChart");
         let ctx = canvas.getContext("2d");
 
         this.lineChart = new Chart(ctx, {
@@ -60,7 +70,11 @@ export class LineChartComponent implements OnInit {
               display: false
             },
             elements: {
-              point: { radius: 0, hitRadius: 5, hoverRadius: 5 },
+              point: {
+                radius: 0,
+                hitRadius: 5,
+                hoverRadius: 5
+              },
               line: { tension: 0 }
             },
             scales: {

@@ -5,7 +5,7 @@
   </mat-form-field>
 </div>
 
-<div class="example-container mat-elevation-z8">
+<div class="example-container mat-elevation-z1">
 	<mat-table [dataSource]="dataSource" matSort>
 
 		<!--- Note that these columns can be defined in any order.
@@ -40,7 +40,8 @@
 			<mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'gains-class'"> +/- </mat-header-cell>
 			<mat-cell
         *matCellDef="let security"
-        [ngClass]="{'gains-class-positive' : security.gain > 0, 'gains-class-negative' : security.gain < 0}"> {{ security.gain | number:'1.3-3' }}
+        [ngClass]="{'gains-class-positive' : security.gain > 0, 'gains-class-negative' : security.gain < 0, 'gains-class-flat' : security.gain == 0}">
+        {{ security.gain | number:'1.3-3' }}
       </mat-cell>
 		</ng-container>
 
@@ -48,7 +49,8 @@
 			<mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'gains-class'"> % </mat-header-cell>
 			<mat-cell
         *matCellDef="let security"
-        [ngClass]="{'gains-class-positive' : security.gain > 0, 'gains-class-negative' : security.gain < 0}"> {{ security.gainAsPercentage | number:'1.3-3' }}
+        [ngClass]="{'gains-class-positive' : security.gain > 0, 'gains-class-negative' : security.gain < 0, 'gains-class-flat' : security.gain == 0}">
+        {{ security.gainAsPercentage | number:'1.3-3' }}
       </mat-cell>
 		</ng-container>
 

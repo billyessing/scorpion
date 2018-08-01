@@ -1,41 +1,46 @@
-<mat-card style="margin-top: 2em;">
-
-    <!-- <mat-card-actions>
-      <button mat-button-toggle>1 day</button>
-      <button mat-button>5 days</button>
-    </mat-card-actions> -->
-
-    <!-- <div class="example-selected-value">Selected value: {{group.value}}</div> -->
-
-    <div *ngIf="lineChart" style="display: block">
-      <mat-button-toggle-group #group="matButtonToggleGroup" [value]="timePeriod">
-        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1day">
-          1 day
-        </mat-button-toggle>
-        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="5days">
-          5 days
-        </mat-button-toggle>
-        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1month">
-          1 month
-        </mat-button-toggle>
-        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="3months">
-          3 months
-        </mat-button-toggle>
-        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="6months">
-          6 months
-        </mat-button-toggle>
-        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1year">
-          1 year
-        </mat-button-toggle>
-        <mat-button-toggle (click)="updateTimePeriod(group.value)" value="5year">
-          5 years
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-      <canvas class="lineChart" id="lineChart"></canvas>
-    </div>
-
-    <div *ngIf="!lineChart">
-      <span style="text-align: center;"> Could not retrieve data... </span>
-    </div>
-
+<mat-card>
+  <mat-tab-group
+    headerPosition="above"
+    (selectedTabChange)="updateTimePeriod($event)"
+    style="margin-bottom: 2em;">
+    <mat-tab label="1 day" (tabClicked)="updateTimePeriod(value)"> </mat-tab>
+    <mat-tab label="5 days" (click)="updateTimePeriod(value)"> </mat-tab>
+    <mat-tab label="1 month" (click)="updateTimePeriod(value)"> </mat-tab>
+    <mat-tab label="3 months" (click)="updateTimePeriod(value)"> </mat-tab>
+    <mat-tab label="6 months" (click)="updateTimePeriod(value)"> </mat-tab>
+    <mat-tab label="1 year" (click)="updateTimePeriod(value)"> </mat-tab>
+    <mat-tab label="5 years" (click)="updateTimePeriod(value)"> </mat-tab>
+  </mat-tab-group>
+  <div style="display: block">
+    <canvas class="lineChart" id="lineChart"></canvas>
+  </div>
+  <div *ngIf="!lineChart" class="loading">
+    Retrieving data...
+    <mat-spinner></mat-spinner>
+  </div>
 </mat-card>
+
+
+<!-- <mat-button-toggle-group #group="matButtonToggleGroup" [value]="timePeriod">
+  <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1day">
+    1 day
+  </mat-button-toggle>
+  <mat-button-toggle (click)="updateTimePeriod(group.value)" value="5days">
+    5 days
+  </mat-button-toggle>
+  <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1month">
+    1 month
+  </mat-button-toggle>
+  <mat-button-toggle (click)="updateTimePeriod(group.value)" value="3months">
+    3 months
+  </mat-button-toggle>
+  <mat-button-toggle (click)="updateTimePeriod(group.value)" value="6months">
+    6 months
+  </mat-button-toggle>
+  <mat-button-toggle (click)="updateTimePeriod(group.value)" value="1year">
+    1 year
+  </mat-button-toggle>
+  <mat-button-toggle (click)="updateTimePeriod(group.value)" value="5year">
+    5 years
+  </mat-button-toggle>
+</mat-button-toggle-group> -->

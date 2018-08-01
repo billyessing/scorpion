@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { map, debounceTime, delay, throttleTime } from 'rxjs/operators';
+import { Security } from './../models/security.model';
 
 const apiKey = 'WEXP46DZZBON9J5X';
 
@@ -63,19 +65,21 @@ export class SecurityDataService {
     let timeSeries = timeSeriesHeader[timePeriod];
 
     return this.http.get(url)
-      .map(data => {
-        let keys = data[timeSeries][Object.keys(data[timeSeries])[0]];
+      .pipe(
+        throttleTime(2000),
+        map(data => {
+          let keys = data[timeSeries][Object.keys(data[timeSeries])[0]];
 
-        this.securityData.open = keys[securityEnum.open];
-        this.securityData.high = keys[securityEnum.high];
-        this.securityData.low = keys[securityEnum.low];
-        this.securityData.close = keys[securityEnum.close];
-        this.securityData.volume = keys[securityEnum.volume];
+          this.securityData.open = keys[securityEnum.open];
+          this.securityData.high = keys[securityEnum.high];
+          this.securityData.low = keys[securityEnum.low];
+          this.securityData.close = keys[securityEnum.close];
+          this.securityData.volume = keys[securityEnum.volume];
 
-        return this.securityData;
+          return this.securityData;
       },
       err => console.log("sds.getSecurityData() could not fetch data...")
-    )
+    ))
   }
 
   getHistoricalSecurityData(code: string, timePeriod: string): Observable<{}> {

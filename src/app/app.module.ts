@@ -9,7 +9,11 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireFunctionsModule } from 'angularfire2/functions';
+
+import { AuthModule } from './shared/auth/auth.module';
 
 //Angular Material Components
 import {
@@ -49,25 +53,24 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { HomeComponent } from './core/pages/home/home.component';
+import { SecurityInfoComponent } from './core/pages/security-info/security-info.component';
+import { PieChartComponent } from './core/charts/pie-chart/pie-chart.component';
+import { SearchBoxComponent } from './core/search-box/search-box.component';
+import { LineChartComponent } from './core/charts/line-chart/line-chart.component';
+import { AddSecurityComponent } from './core/trades/add-security/add-security.component';
+import { HoldingsTableComponent } from './core/holdings-table/holdings-table.component';
+import { NewSecurityComponent } from './core/trades/new-security/new-security.component';
+import { ExistingSecurityComponent } from './core/trades/existing-security/existing-security.component';
+import { LoginComponent } from './core/pages/login/login.component';
 
 // Services
 import { FirestoreService } from './shared/services/firestore.service';
 
 // Other
 import { environment } from '../environments/environment';
-import { HoldingsTableComponent } from './core/holdings-table/holdings-table.component';
-import { NewSecurityComponent } from './core/trades/new-security/new-security.component';
-import { ExistingSecurityComponent } from './core/trades/existing-security/existing-security.component';
-
 import { CdkDetailRowDirective } from './core/holdings-table/cdk-detail-row.directive';
-
-import { SecurityInfoComponent } from './core/pages/security-info/security-info.component';
-// import { DialogOverviewExampleDialog } from './core/pages/security-info/security-info.component';
-
-import { PieChartComponent } from './core/charts/pie-chart/pie-chart.component';
-import { SearchBoxComponent } from './core/search-box/search-box.component';
-import { LineChartComponent } from './core/charts/line-chart/line-chart.component';
-import { AddSecurityComponent } from './core/trades/add-security/add-security.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { SignupComponent } from './core/pages/signup/signup.component';
 
 
 @NgModule({
@@ -85,13 +88,16 @@ import { AddSecurityComponent } from './core/trades/add-security/add-security.co
     SearchBoxComponent,
     LineChartComponent,
     // DialogOverviewExampleDialog,
-    AddSecurityComponent
+    AddSecurityComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    OverlayModule,
     MatCheckboxModule,
     MatButtonModule,
     MatInputModule,
@@ -126,7 +132,10 @@ import { AddSecurityComponent } from './core/trades/add-security/add-security.co
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireStorageModule,
+    AngularFireFunctionsModule,
+    AuthModule
   ],
   providers: [
     FirestoreService

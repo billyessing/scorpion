@@ -5,6 +5,7 @@ import { CsvParserService } from './../../../shared/services/csv-parser.service'
 import { SecurityDataService } from './../../../shared/services/security-data.service';
 import { Security } from './../../../shared/models/security.model';
 import { AddSecurityComponent } from './../../trades/add-security/add-security.component';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-security-info',
@@ -13,12 +14,15 @@ import { AddSecurityComponent } from './../../trades/add-security/add-security.c
 })
 export class SecurityInfoComponent implements OnInit {
 
+  theme = 'scorpion-theme-dark';
+
   timePeriod: string;
 
   securityCode: string;
   securityOpen: number;
   securityHigh: number;
   securityLow: number;
+  securityClose: number;
   securityVolume: number;
   securityDescriptive: string[];
 
@@ -29,7 +33,8 @@ export class SecurityInfoComponent implements OnInit {
     private route: ActivatedRoute,
     private csvService: CsvParserService,
     private securityService: SecurityDataService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private overlayContainer: OverlayContainer
   ) {
     this.route.params
       .subscribe(params => {
@@ -38,10 +43,8 @@ export class SecurityInfoComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.getSecurityDescriptive();
     this.getSecurityData();
-
   }
 
   getSecurityDescriptive() {
@@ -58,8 +61,11 @@ export class SecurityInfoComponent implements OnInit {
         this.securityOpen = data['open']
         this.securityHigh = data['high']
         this.securityLow = data['low']
+        this.securityClose = data['close']
         this.securityVolume = data['volume']
-      })
+      },
+      err => console.log("could not fetch daily data...")
+    )
   }
 
   openDialog() {
@@ -70,14 +76,11 @@ export class SecurityInfoComponent implements OnInit {
           name: this.companyName,
           code: this.securityCode,
           industry: this.companyIndustry,
-          price: this.securityOpen
+          price: this.securityClose
         }
       });
 
-      // dialogRef.afterClosed().subscribe(result => {
-      //   console.log('The dialog was closed');
-      //   this.animal = result;
-      // });
+      // dialogRef.afterClosed().subscribe(result => { });
     }
 
   imageExists(imgUrl) {

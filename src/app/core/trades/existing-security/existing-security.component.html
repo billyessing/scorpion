@@ -6,9 +6,10 @@
     </div> -->
 
     <div clas="col-md-4">
-      <div class="security-box">
-        <div class="security-company"> Company Name... </div>
-        <div class="security-code"> {{ security.code }} </div>
+      <div class="security-box" routerLink="/share/{{security.code.toLowerCase()}}" routerLinkActive="active">
+        <span class="security-name">{{ security.companyName }}</span>
+        <br>
+        <span class="security-industry">{{ security.industry }}</span>
       </div>
     </div>
 

@@ -36,6 +36,7 @@
 }
 
 .security-row:not(.expanded):hover {
+  // TODO: change when theme is dark
   background: #f5f5f5;
 }
 
@@ -63,4 +64,9 @@
 .gains-class-negative {
   padding-left: 10px;
   background-color:rgba(255,0,0,0.3);
+}
+
+.gains-class-flat {
+  padding-left: 10px;
+  background-color:rgba(211,211,211,0.4);
 }

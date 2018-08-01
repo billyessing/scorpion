@@ -1,0 +1,9 @@
+$scorpion-theme-dark-primary: mat-palette($mat-grey);
+$scorpion-theme-dark-accent: mat-palette($mat-indigo);
+$scorpion-theme-dark-warn: mat-palette($mat-red);
+
+$scorpion-theme-dark: mat-dark-theme(
+  $scorpion-theme-dark-primary,
+  $scorpion-theme-dark-accent,
+  $scorpion-theme-dark-warn
+);

@@ -1,0 +1,9 @@
+$scorpion-theme-light-primary: mat-palette($mat-orange);
+$scorpion-theme-light-accent: mat-palette($mat-orange);
+$scorpion-theme-light-warn: mat-palette($mat-red);
+
+$scorpion-theme-light: mat-light-theme(
+  $scorpion-theme-light-primary,
+  $scorpion-theme-light-accent,
+  $scorpion-theme-light-warn
+);

@@ -1,34 +1,25 @@
-.mat-button-toggle-group {
-  // width: 95%;
-  margin-bottom: 2.5em;
-  width: 100%;
+.mat-card {
+  margin-top: 0.5em;
+  min-height: 500px;
 }
 
-.mat-button-toggle {
-  background-color: white;
-  color: black;
-  width: 11em;
+.mat-tab-group ::ng-deep.mat-tab-label, ::ng-deep.mat-tab-label-active{
+  // max-width: 16em;
+  min-width: 9em;
+}
+
+.loading {
   text-align: center;
-  font-size: 14px;
-}
-
-.mat-button-toggle-checked {
-  background-color: white;
-  color: black;
-  border-bottom: solid black;
-  font-weight: bold;
-}
-
-mat-button-toggle-checked:focus *{ outline: none !important; }
-
-.load-failure {
-  margin-top: 5em;
-  margin-bottom: 5em;
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 22px;
+  display: inline-block;
   position: relative;
   float: left;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.mat-spinner {
+  margin-top: 2em;
+  margin-left: 1.25em;
 }

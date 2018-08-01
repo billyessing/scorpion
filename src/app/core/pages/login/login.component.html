@@ -1,0 +1,52 @@
+<div class="login" style="text-align: center;">
+  <mat-card>
+    <!-- <button (click)="signInWithGoogle()" class="button btn-social btn-google"> -->
+    <div class="social-icons">
+      <span style="font-size: 24px;">Welcome!</span>
+      <br><br>
+      <span style="font-size: 18px;">Sign in</span>
+      <br><br>
+      <i class="fa fa-google fa-2x" (click)="signInWithGoogle()"></i>
+      <i class="fa fa-github fa-2x" (click)="signInWithGithub()"></i>
+      <i class="fa fa-facebook fa-2x" (click)="signInWithFacebook()"></i>
+      <i class="fa fa-twitter fa-2x" (click)="signInWithTwitter()"></i>
+    </div>
+    <br>
+    <p>or</p>
+
+    <form [formGroup]="userForm" (ngSubmit)="login()">
+      <mat-form-field style="width: 220px; margin-top: 16px">
+        <input
+          matInput
+          formControlName="emailOrUsername"
+          required
+          placeholder="Username or email"
+          autocomplete="nope">
+      </mat-form-field>
+      <br>
+      <mat-form-field style="width: 220px;">
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          required
+          placeholder="Password"
+          autocomplete="new-password">
+      </mat-form-field>
+      <br><br>
+      <button
+        mat-button
+        routerLink="/signup"
+        routerLinkActive>Signup
+      </button>
+      <button
+        type="submit"
+        [disabled]="!userForm.valid"
+        mat-button>Login
+      </button>
+    </form>
+
+    <br><br>
+    <span class="forgot">Forgot email or password?</span>
+  </mat-card>
+</div>

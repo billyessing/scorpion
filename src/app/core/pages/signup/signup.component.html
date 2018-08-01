@@ -1,0 +1,68 @@
+<div class="signup">
+  <mat-card>
+    <span style="font-size: 24px;">Welcome to Scorpion!</span>
+    <br>
+    <span style="font-size: 16px; opacity: 0.8;">Please fill in the form below</span>
+    <br>
+    <!-- <img mat-card-sm-image src="./../../assets/images/scorpion-black.png" style="border: solid;"> -->
+    <div class="stepper">
+      <form [formGroup]="userForm">
+        <mat-vertical-stepper #linearVerticalStepper="matVerticalStepper" formArrayName="formArray" [linear]="isNonLinear">
+          <mat-step formGroupName="0" [stepControl]="formArray?.get([0])" [completed]="false">
+            <ng-template matStepLabel>Fill out your name</ng-template>
+            <mat-form-field>
+              <mat-label>First name</mat-label>
+              <input matInput formControlName="firstNameFormCtrl" required>
+              <mat-error>This field is required</mat-error>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <mat-label>Last name</mat-label>
+              <input matInput formControlName="lastNameFormCtrl" required>
+              <mat-error>This field is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Username</mat-label>
+              <input matInput formControlName="usernameFormCtrl">
+              <!-- <mat-error>This field is required</mat-error> -->
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step formGroupName="1" [stepControl]="formArray?.get([1])" [completed]="false">
+            <ng-template matStepLabel>
+              <div>Fill out your email address</div>
+            </ng-template>
+            <mat-form-field>
+              <mat-label>Email address</mat-label>
+              <input matInput formControlName="emailFormCtrl" required email>
+              <mat-error>The input is invalid.</mat-error>
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step [completed]="false">
+            <ng-template matStepLabel>Confirm your information</ng-template>
+            <div>
+              <button
+                *ngIf="userForm.valid"
+                mat-button
+                (click)="signup()">All done!
+              </button>
+              <span *ngIf="!userForm.valid" style="font-size: 16px; opacity: 0.7;">
+                <br>Form is incomplete...
+              </span>
+              <!-- <button type="button" mat-button (click)="linearVerticalStepper.reset()">Reset</button> -->
+            </div>
+          </mat-step>
+        </mat-vertical-stepper>
+      </form>
+
+    </div>
+  </mat-card>
+</div>

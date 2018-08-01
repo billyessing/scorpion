@@ -3,14 +3,15 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { MatPaginator, MatSort, MatTableDataSource, MatSortable } from '@angular/material';
 
 import 'rxjs/Rx';
-import { map, take, tap, filter, scan  } from 'rxjs/operators';
+import { map, take, tap, filter, scan } from 'rxjs/operators';
 import { Observable, Observer, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
 
 import { ExistingSecurityComponent } from './../trades/existing-security/existing-security.component';
 import { FirestoreService } from './../../shared/services/firestore.service';
 import { SecurityDataService } from './../../shared/services/security-data.service';
 import { Security } from './../../shared/models/security.model';
-
+import { AuthService } from './../../shared/auth/auth.service';
+import * as firebase from 'firebase/app'
 
 @Component({
   selector: 'app-holdings-table',
@@ -26,6 +27,8 @@ import { Security } from './../../shared/models/security.model';
 })
 export class HoldingsTableComponent implements OnInit {
 
+  user: firebase.User;
+
   dataSource: MatTableDataSource<Security>;
   displayedColumns = ['code', 'purchasePrice', 'lastPrice', 'volume', 'value', 'gain', 'gainAsPercentage', 'updatedAt'];
   dateString: string;
@@ -35,16 +38,19 @@ export class HoldingsTableComponent implements OnInit {
 
   constructor(
     private db: FirestoreService,
-    private securityData: SecurityDataService) { }
+    private securityData: SecurityDataService,
+    private auth: AuthService) { }
 
   ngOnInit() {
+    this.user = firebase.auth().currentUser;
+
     this.getPortfolio();
     this.getSecurityData();
     this.preSort();
   }
 
   getPortfolio() {
-    this.db.col$<Security>('holdings')
+    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
       .subscribe(data => {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.sort = this.sort;
@@ -71,23 +77,22 @@ export class HoldingsTableComponent implements OnInit {
   // uses security data api to fetch real time data
   // (can't handle > ~6 concurrent api calls) ... needs work
   getSecurityData() {
-    this.db.col$<Security>('holdings')
+    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
       .subscribe(col => {
         col.forEach(security => {
           // checks if last price is undefined or null
           // i.e. if the stock was just added
           if (security.lastPrice == null) {
-            console.log(security.code);
+            // console.log(security.code);
             this.securityData.getSecurityData(security.code)
               .subscribe(data => {
-
                 return this.updateSecurity(security, data)
               },
               err => console.log('ERROR: failed to retrieve data for ' + security.code),
               () => console.log('successful for: ' + security.code)
-              )
-            }
-          })
+            )
+          }
+        })
       })
   }
 
@@ -104,7 +109,7 @@ export class HoldingsTableComponent implements OnInit {
     let gain = ((lastPrice - security.purchasePrice) * security.volume)
     let gainAsPercentage = ((gain) * 100 / (security.purchasePrice * security.volume))
 
-    this.db.update(`holdings/${security.code}`, ({
+    this.db.update<Security>(`users_data/${this.user.uid}/holdings/${security.code}`, ({
       lastPrice: Number(lastPrice),
       open: Number(open),
       high: Number(high),
