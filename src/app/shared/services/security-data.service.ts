@@ -66,7 +66,6 @@ export class SecurityDataService {
 
     return this.http.get(url)
       .pipe(
-        throttleTime(2000),
         map(data => {
           let keys = data[timeSeries][Object.keys(data[timeSeries])[0]];
 

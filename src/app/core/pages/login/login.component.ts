@@ -18,6 +18,8 @@ export class LoginComponent implements OnInit {
 
   userForm: FormGroup;
   passwordReset = false;
+
+  // TODO: add validation error messages to HTML
   formErrors: FormErrors = {
     'emailOrUsername': '',
     'password': ''

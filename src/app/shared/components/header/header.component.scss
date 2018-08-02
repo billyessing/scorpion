@@ -9,3 +9,12 @@
 .sign-in:hover {
   color: #D3D3D3;
 }
+
+img {
+  filter: invert(100%);
+}
+
+img:hover {
+  filter: invert(50%);
+  // filter: sepia(50%);
+}

@@ -6,63 +6,90 @@
     <br>
     <!-- <img mat-card-sm-image src="./../../assets/images/scorpion-black.png" style="border: solid;"> -->
     <div class="stepper">
-      <form [formGroup]="userForm">
-        <mat-vertical-stepper #linearVerticalStepper="matVerticalStepper" formArrayName="formArray" [linear]="isNonLinear">
-          <mat-step formGroupName="0" [stepControl]="formArray?.get([0])" [completed]="false">
-            <ng-template matStepLabel>Fill out your name</ng-template>
-            <mat-form-field>
-              <mat-label>First name</mat-label>
-              <input matInput formControlName="firstNameFormCtrl" required>
-              <mat-error>This field is required</mat-error>
-            </mat-form-field>
-            <br>
-            <mat-form-field>
-              <mat-label>Last name</mat-label>
-              <input matInput formControlName="lastNameFormCtrl" required>
-              <mat-error>This field is required</mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Username</mat-label>
-              <input matInput formControlName="usernameFormCtrl">
-              <!-- <mat-error>This field is required</mat-error> -->
-            </mat-form-field>
-            <div>
-              <button mat-button matStepperNext>Next</button>
-            </div>
+        <mat-vertical-stepper [linear]="isNonLinear" #stepper>
+          <mat-step [stepControl]="namesForm" [completed]="false">
+            <form [formGroup]="namesForm">
+              <ng-template matStepLabel>Fill out your name</ng-template>
+              <mat-form-field>
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="firstNameFormCtrl" required>
+                <mat-error>This field is required</mat-error>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <mat-label>Last name</mat-label>
+                <input matInput formControlName="lastNameFormCtrl" required>
+                <mat-error>This field is required</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input matInput formControlName="usernameFormCtrl">
+                <!-- <mat-error>This field is required</mat-error> -->
+              </mat-form-field>
+              <!-- <div>
+                <button mat-button matStepperNext>Next</button>
+              </div> -->
+            </form>
           </mat-step>
 
-          <mat-step formGroupName="1" [stepControl]="formArray?.get([1])" [completed]="false">
-            <ng-template matStepLabel>
-              <div>Fill out your email address</div>
-            </ng-template>
-            <mat-form-field>
-              <mat-label>Email address</mat-label>
-              <input matInput formControlName="emailFormCtrl" required email>
-              <mat-error>The input is invalid.</mat-error>
-            </mat-form-field>
-            <div>
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
-            </div>
+          <mat-step [stepControl]="emailAndPasswordForm" [completed]="false">
+            <form [formGroup]="emailAndPasswordForm">
+              <ng-template matStepLabel>Set email and password</ng-template>
+              <mat-form-field>
+                <mat-label>Email address</mat-label>
+                <input matInput formControlName="emailFormCtrl" required email>
+                <mat-error>The input is invalid</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input
+                  matInput
+                  formControlName="passwordFormCtrl"
+                  required
+                  autocomplete="new-password"
+                  advs-compare="confirmPasswordFormCtrl"
+                  parent="true"
+                  [type]="hide ? 'password' : 'text'">
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                <mat-error>The input is invalid</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Re-enter password</mat-label>
+                <input
+                  matInput
+                  formControlName="confirmPasswordFormCtrl"
+                  required
+                  autocomplete="new-password"
+                  advs-compare="passwordFormCtrl"
+                  parent="false"
+                  [type]="hide ? 'password' : 'text'">
+
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                <mat-error>Password does not match</mat-error>
+              </mat-form-field>
+            </form>
           </mat-step>
 
           <mat-step [completed]="false">
-            <ng-template matStepLabel>Confirm your information</ng-template>
+            <ng-template matStepLabel>All done</ng-template>
             <div>
+              <br>
+              <!-- <button type="button" mat-button (click)="linearVerticalStepper.reset()">Reset</button> -->
               <button
-                *ngIf="userForm.valid"
+                *ngIf="namesForm.valid && emailAndPasswordForm.valid"
+                class="confirm"
                 mat-button
-                (click)="signup()">All done!
+                (click)="signup()">
+                Sign up!
               </button>
-              <span *ngIf="!userForm.valid" style="font-size: 16px; opacity: 0.7;">
+              <span
+                *ngIf="!namesForm.valid || !emailAndPasswordForm.valid"
+                style="font-size: 16px; opacity: 0.7; color: red">
                 <br>Form is incomplete...
               </span>
-              <!-- <button type="button" mat-button (click)="linearVerticalStepper.reset()">Reset</button> -->
             </div>
           </mat-step>
         </mat-vertical-stepper>
-      </form>
-
     </div>
   </mat-card>
 </div>

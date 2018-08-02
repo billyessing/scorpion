@@ -72,11 +72,14 @@ export class AuthService {
 
   // Email / Password auth
 
-  emailSignUp(email: string, password: string) {
+  emailSignUp(email: string, password: string, userDetails: any) {
     return this.afAuth.auth
       .createUserWithEmailAndPassword(email, password)
       .then(credential => {
-        this.updateUserData(credential.user);
+        this.updateUserData(credential.user, userDetails);
+
+        // TODO: is there a cleaner way to do this?
+        return this.router.navigate(['/home']);
       })
       .catch(error => this.handleError(error));
   }
@@ -113,14 +116,27 @@ export class AuthService {
   }
 
   // Sets user data to firestore after succesful login
-  private updateUserData(user) {
+  private updateUserData(user, userDetails?) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+
+    let firstName = null;
+    let lastName = null;
+    let username = null;
+
+    if (user.username) {
+      username = user.username;
+    } else if (userDetails) {
+      firstName = userDetails.firstNameFormCtrl;
+      lastName = userDetails.lastNameFormCtrl;
+      username = userDetails.usernameFormCtrl;
+    }
 
     const data: User = {
       uid: user.uid,
       email: user.email,
-      // probably a better way to do this...
-      username: user.username == null ? null : user.username
+      firstName: user.firstName == null ? null : firstName,
+      lastName: user.lastName == null ? null : lastName,
+      username: username
     }
 
     return userRef.set(data, { merge: true })
@@ -128,15 +144,6 @@ export class AuthService {
 
   isAuthenticated() {
     return this.afAuth.auth.currentUser != null;
-    // return this.token != null;
   }
 
-  // getToken() {
-  //   this.afAuth.auth.currentUser.getIdToken()
-  //     .then(token => {
-  //       this.token = token;
-  //     })
-  //   return this.token;
-  // }
-  
 }

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import {MatSidenav} from '@angular/material/sidenav';
 
 
 @Component({
@@ -8,6 +9,9 @@ import { OverlayContainer } from '@angular/cdk/overlay';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+
+  @ViewChild('sidenav') sidenav: MatSidenav;
+
   title = 'app';
   theme = 'scorpion-theme-light';
 
@@ -28,6 +32,10 @@ export class AppComponent implements OnInit {
        overlayContainerClasses.remove(...themeClassesToRemove);
     }
     overlayContainerClasses.add(theme);
+  }
+
+  close() {
+    this.sidenav.close();
   }
 
 }

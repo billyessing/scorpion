@@ -13,6 +13,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireFunctionsModule } from 'angularfire2/functions';
 
+
 import { AuthModule } from './shared/auth/auth.module';
 
 //Angular Material Components
@@ -65,12 +66,15 @@ import { LoginComponent } from './core/pages/login/login.component';
 
 // Services
 import { FirestoreService } from './shared/services/firestore.service';
+import { SidebarService } from './shared/components/sidebar/sidebar.service';
 
 // Other
 import { environment } from '../environments/environment';
 import { CdkDetailRowDirective } from './core/holdings-table/cdk-detail-row.directive';
+import { CompareDirective } from './core/pages/signup/compare.directive';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { SignupComponent } from './core/pages/signup/signup.component';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 
 
 @NgModule({
@@ -82,15 +86,16 @@ import { SignupComponent } from './core/pages/signup/signup.component';
     HoldingsTableComponent,
     NewSecurityComponent,
     ExistingSecurityComponent,
-    CdkDetailRowDirective,
     SecurityInfoComponent,
     PieChartComponent,
     SearchBoxComponent,
     LineChartComponent,
-    // DialogOverviewExampleDialog,
     AddSecurityComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    CdkDetailRowDirective,
+    CompareDirective,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -135,10 +140,10 @@ import { SignupComponent } from './core/pages/signup/signup.component';
     AngularFireAuthModule,
     AngularFireStorageModule,
     AngularFireFunctionsModule,
-    AuthModule
+    AuthModule,
   ],
   providers: [
-    FirestoreService
+    FirestoreService, SidebarService
   ],
   bootstrap: [
     AppComponent

@@ -1,7 +1,11 @@
 <div [class]="theme">
   <app-header></app-header>
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
-  <!-- <app-footer></app-footer> -->
+  <app-sidebar></app-sidebar>
+  <mat-sidenav-container class="example-container" (backdropClick)="close()">
+    <mat-sidenav-content>
+      <div class="container">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>
