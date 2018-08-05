@@ -5,17 +5,36 @@
         <img [src]="getImage(securityCode)" (error)="updateFlag()">
       </div> -->
       <!-- <ng-template #noImage> -->
+      <div style="width: 225px;">
         <div class="security-box">
           <span>{{ securityCode.toUpperCase() }}</span>
         </div>
-      <!-- </ng-template> -->
+        <mat-card-actions>
+          <button class="add-button" mat-button style="margin-left: 35px;" (click)="openDialog()">+  ADD TO PORTFOLIO</button>
+        </mat-card-actions>
+      </div>
+
       <div class="col">
-        <span class="company-name">{{ companyName }}</span>
-        <br>
-        <span class="company-industry">Industry: {{ companyIndustry }}</span>
+        <div class="row">
+          <div class="col-md-6">
+            <span class="company-name">{{ companyName }}</span>
+            <br>
+            <span class="company-industry">Industry: {{ companyIndustry }}</span>
+          </div>
+          <div class="col-md-6">
+            <span class="security-price" style="font-size:28px;">${{ securityClose | number:'1.2-2' }} AUD</span>
+            <br>
+            <span
+              [ngClass]="{'gains-class-positive' : securityClose - securityOpen > 0,
+                          'gains-class-negative' : securityClose - securityOpen < 0}">
+            <span *ngIf="securityClose - securityOpen > 0">+ </span>
+            {{ securityClose - securityOpen | number: '1.2-2' }}
+            <span style="padding-left: 5px;"> </span>
+            ({{ (securityClose - securityOpen)/(securityOpen) | number: '1.2-2' }}%)</span>
+          </div>
+        </div>
         <hr>
         <div class="row security-details">
-
           <div clas="col-md-2" style="margin-right: 4px; font-size: 14px">
             <b>Open:</b> <br>
             <b>Day high:</b> <br>
@@ -41,9 +60,6 @@
         </div>
       </div>
     </div>
-    <mat-card-actions>
-      <button class="add-button" mat-button style="margin-left: 23px;" (click)="openDialog()">ADD TO PORTFOLIO</button>
-    </mat-card-actions>
   </mat-card>
 
   <div class="ng-content">

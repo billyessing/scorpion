@@ -56,7 +56,7 @@
 
     <ng-container matColumnDef="updatedAt">
 			<mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'gains-class'"> Added </mat-header-cell>
-			<mat-cell *matCellDef="let security" [ngClass]="'dates-col'"> {{ security.updatedAt.toDate() | date:'medium' }} </mat-cell>
+			<mat-cell *matCellDef="let security" [ngClass]="'dates-col'"> {{ security.updatedAt?.toDate() | date:'medium' }} </mat-cell>
 		</ng-container>
 
 		<mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { SidebarService } from './sidebar.service';
+import { SettingsService } from './../../services/settings.service';
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -8,23 +9,18 @@ import { SidebarService } from './sidebar.service';
 })
 export class SidebarComponent implements OnInit {
 
-  // @Input() toggle: boolean = false;
-  //
-  //
-  // events: string[] = [];
-  // opened: boolean;
-  //
-  // getToggle() {
-  //   console.log(this.toggle);
-  //   this
-  // }
-
   toggleOpen: boolean = true;
 
-  constructor(private sb: SidebarService) { }
+  constructor(
+    private settingsService: SettingsService
+  ) { }
 
   ngOnInit() {
-    this.sb.toggleStatus.subscribe(toggle => this.toggleOpen = toggle);
+    this.settingsService.toggleStatus.subscribe(toggle => this.toggleOpen = toggle);
+  }
+
+  test() {
+    console.log('test');
   }
 
 }

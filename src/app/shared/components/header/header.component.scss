@@ -1,20 +1,26 @@
-.header {
-  margin-bottom: 5em;
-}
+// .header {
+//   margin-bottom: 5em;
+// }
 
-.sign-in {
-  color: white;
-}
+// .sign-in {
+//   color: white;
+// }
 
 .sign-in:hover {
-  color: #D3D3D3;
+  // color: #D3D3D3;
+  font-style: underline;
 }
 
 img {
   filter: invert(100%);
 }
 
-img:hover {
+.nav-icons:hover {
   filter: invert(50%);
   // filter: sepia(50%);
+}
+
+.menu-item:focus {
+  outline:none;
+  box-shadow:none;
 }

@@ -78,7 +78,7 @@ export class AuthService {
       .then(credential => {
         this.updateUserData(credential.user, userDetails);
 
-        // TODO: is there a cleaner way to do this?
+        // TODO: is there a nicer way to do this?
         return this.router.navigate(['/home']);
       })
       .catch(error => this.handleError(error));
@@ -103,6 +103,7 @@ export class AuthService {
       .catch(error => this.handleError(error));
   }
 
+  // should probably be doing more here...
   signOut() {
     this.token = null;
     this.afAuth.auth.signOut().then(() => {
@@ -123,8 +124,10 @@ export class AuthService {
     let lastName = null;
     let username = null;
 
-    if (user.username) {
-      username = user.username;
+    // social login
+    if (user.displayName) {
+      username = user.displayName;
+    // email login
     } else if (userDetails) {
       firstName = userDetails.firstNameFormCtrl;
       lastName = userDetails.lastNameFormCtrl;
@@ -134,8 +137,8 @@ export class AuthService {
     const data: User = {
       uid: user.uid,
       email: user.email,
-      firstName: user.firstName == null ? null : firstName,
-      lastName: user.lastName == null ? null : lastName,
+      firstName: firstName,
+      lastName: lastName,
       username: username
     }
 

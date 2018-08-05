@@ -39,7 +39,8 @@ export class HoldingsTableComponent implements OnInit {
   constructor(
     private db: FirestoreService,
     private securityData: SecurityDataService,
-    private auth: AuthService) { }
+    private auth: AuthService
+  ) { }
 
   ngOnInit() {
     this.user = firebase.auth().currentUser;
@@ -135,6 +136,6 @@ export class HoldingsTableComponent implements OnInit {
       value: Number(value),
       gain: Number(gain),
       gainAsPercentage: Number(gainAsPercentage)
-    }), false);
+    }));
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { FirestoreService } from './../../../shared/services/firestore.service';
 import { SecurityInfoComponent } from './../../pages/security-info/security-info.component'
 import { Security } from './../../../shared/models/security.model';
@@ -22,6 +23,7 @@ export class AddSecurityComponent implements OnInit {
 
   constructor(
     private db: FirestoreService,
+    public snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<AddSecurityComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
@@ -36,14 +38,23 @@ export class AddSecurityComponent implements OnInit {
       companyName: this.data['name'],
       industry: this.data['industry'],
       purchasePrice: Number(this.data['price']),
-      volume: Number(this.volume)
+      volume: Number(this.volume),
+      updatedAt: new Date()
     }
 
     this.db.set<Security>(`users_data/${this.user.uid}/holdings/${securityDetails.code}`, securityDetails);
     this.dialogRef.close();
+
+    this.openSnackBar(securityDetails);
+  }
+
+  openSnackBar(trade: any) {
+    let msg = 'Successfully added ' + trade.volume + ' ' + trade.code + ' shares to your portfolio.'
+    this.snackBar.open(msg, '', {duration: 5000})
   }
 
   onCancel(): void {
+
     this.dialogRef.close();
   }
 

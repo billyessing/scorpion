@@ -81,7 +81,7 @@ export class SecurityDataService {
     ))
   }
 
-  getHistoricalSecurityData(code: string, timePeriod: string): Observable<{}> {
+  getHistoricalSecurityData(code: string, timePeriod: string) {
     let timeSeries = this.getTimeSeries(timePeriod)
     let outputSize = this.getOutputSize(timePeriod)
 
@@ -92,9 +92,11 @@ export class SecurityDataService {
       .map(data => {
         let keys = Object.keys(data[timeFreq]);
         let keysReq = this.getTimePeriod(keys, timePeriod);
+
         let prices = [];
         let dates = [];
         let volumes = [];
+
 
         if (timePeriod === '1day') {
           keysReq.forEach(key => {

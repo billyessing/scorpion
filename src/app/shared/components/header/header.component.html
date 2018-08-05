@@ -1,56 +1,51 @@
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-  <a class="navbar-brand" routerLink="/home" routerLinkActive="active">
-    <img src="./../../assets/images/scorpion-black.png" style="height: 2em; margin-left: 1em;">
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/home" routerLinkActive="active">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Settings
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Nightshade</a>
-          <a class="dropdown-item" href="#">Light vision</a>
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav> -->
-
 <div class="header">
   <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" (click)="toggleSidebar()">
-      <img src="./../../assets/images/scorpion-black.png" style="height: 2em; margin-left: 1em;">
+    <a *ngIf="auth.user | async; else disableSidebar" class="navbar-brand" (click)="toggleSidebar()">
+      <img class="nav-icons" src="./../../assets/images/scorpion-black.png" style="height: 2em; margin-left: 1em; cursor: pointer;">
     </a>
+    <ng-template #disableSidebar>
+      <a class="navbar-brand">
+        <img src="./../../assets/images/scorpion-black.png" style="height: 2em; margin-left: 1em;">
+      </a>
+    </ng-template>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <a class="nav-link" routerLink="/home" routerLinkActive="active">Home<span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link">About</a>
-        </li>
+        </li> -->
       </ul>
       <ul class="nav-bar nav">
         <li>
           <!-- <a class="nav-link">Contact</a> -->
-          <!-- <button mat-button [matMenuTriggerFor]="menu">Settings</button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item>Item 1</button>
-            <button mat-menu-item>Item 2</button>
-          </mat-menu> -->
-
-          <a *ngIf="auth.user | async; else notAuthenticated" class="nav-link" routerLink="/login" routerLinkActive="active"><span class="sign-in" (click)="logout()">Sign out</span></a>
-          <ng-template #notAuthenticated>
-            <a ng class="nav-link" routerLink="/login" routerLinkActive="active"><span class="sign-in">Sign in</span></a>
-          </ng-template>
+          <span
+            mat-button
+            [matMenuTriggerFor]="menu"
+            class="nav-icons"
+            style="padding-right: 10px; cursor: pointer; color: white">{{ user }} &nbsp;&nbsp;
+            <i class="fa fa-cog fa-lg nav-icons" style="color: white;"></i>
+          </span>
+          <mat-menu #menu="matMenu" [overlapTrigger]="false">
+            <button mat-menu-item class="menu-item" style="padding-top: 10px;" (click)="setTheme('light')">
+              <i class="fa fa-sun-o" style="margin-right: 5px;"></i> Light mode
+            </button>
+            <button mat-menu-item class="menu-item" style="padding-top: -4px;" (click)="setTheme('dark')">
+              <i class="fa fa-moon-o" style="margin-right: 5px;"></i> Nightshade
+            </button>
+            <hr style="margin-left: 0.6em; margin-right: 0.6em; background-color: grey">
+            <a *ngIf="auth.user | async; else notAuthenticated">
+              <button mat-menu-item class="menu-item" (click)="logout()">
+                <i class="fa fa-sign-out" style="margin-right: 10px;"></i>Sign out
+              </button>
+            </a>
+            <ng-template #notAuthenticated>
+              <button mat-menu-item class="menu-item" (click)="login()">
+                <i class="fa fa-sign-out" style="margin-right: 10px;"></i>Sign in
+              </button>
+            </ng-template>
+          </mat-menu>
         </li>
       </ul>
     </div>

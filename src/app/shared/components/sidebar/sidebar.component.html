@@ -1,7 +1,22 @@
-<!-- <mat-sidenav-container class="example-container"> -->
+<!-- <mat-sidenav-container autosize> -->
   <mat-sidenav
-    #sidenav mode="side"
+    #sidenav
+    mode="side"
     [(opened)]="toggleOpen">
-    <div class="sidenav"><br><br><br><br><br>Sidenav content</div>
+    <div class="sidenav">
+      <div style="margin-bottom: 4em;"></div>
+      <div style="padding-top: 1.5em; margin-left: 1.5em; color: white">
+      <span style="font-size: 24px; font-weight: bold;">My portfolios</span><br><br>
+      Portfolio-1<br>
+      Portfolio-2<br>
+      Portfolio-3<br>
+      Portfolio-4<br><br>
+      <hr style="margin-right: 1.5em; background-color: white;"><br>
+      <span style="font-size: 24px; font-weight: bold;">My groups</span><br><br>
+      Group-1<br>
+      Group-2<br>
+      Group-3<br><br>
+      </div>
+    </div>
   </mat-sidenav>
 <!-- </mat-sidenav-container> -->

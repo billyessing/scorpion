@@ -24,7 +24,7 @@ export class LineChartComponent implements OnInit {
 
   lineChart: any;
   // default value
-  timePeriod: string = '1day';
+  timePeriod: string = '5days';
 
   constructor(
     private securityService: SecurityDataService,
@@ -41,13 +41,16 @@ export class LineChartComponent implements OnInit {
     if (this.lineChart) {
       this.lineChart.destroy();
       this.lineChart = null;
-      this.getLineChartData(timePeriod);
     }
+
+    this.getLineChartData(timePeriod);
+
     // this.lineChart.update();
   }
 
   getLineChartData(timePeriod) {
     this.securityService.getHistoricalSecurityData(this.securityCode, timePeriod)
+      .throttleTime(1000)
       .subscribe(data => {
 
         let canvas = <HTMLCanvasElement> document.getElementById("lineChart");
@@ -98,7 +101,7 @@ export class LineChartComponent implements OnInit {
           }
         });
       },
-      err => console.log("could not fetch data...")
+      err => console.log("could not fetch line chart data...")
     )
   }
 

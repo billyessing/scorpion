@@ -1,7 +1,13 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import * as firebase from 'firebase/app'
 import { AuthService } from './../../auth/auth.service';
-import { SidebarService } from './../sidebar/sidebar.service';
+import { SettingsService } from './../../services/settings.service';
+import { FirestoreService } from './../../services/firestore.service';
+import { User } from './../../models/user.model';
+import 'rxjs/Rx';
+import { map, take, tap, filter, scan, switchMap } from 'rxjs/operators';
+import { Observable, Observer, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -11,27 +17,55 @@ import { SidebarService } from './../sidebar/sidebar.service';
 export class HeaderComponent implements OnInit {
 
   toggleOpen: boolean;
-  // @Output() toggleEvent = new EventEmitter<boolean>();
-
+  theme: string;
+  user;
 
   constructor(
-    public auth: AuthService,
-    public sb: SidebarService) { }
+    private auth: AuthService,
+    private settingsService: SettingsService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    // setInterval(() => console.log(firebase.auth().currentUser), 5000);
-    this.sb.toggleStatus.subscribe(toggle => this.toggleOpen = toggle)
+    // this.auth.user.subscribe(user => this.user = user['email']);
+
+    this.getDisplayName();
+
+    this.settingsService.themeSetting.subscribe(theme => this.theme = theme);
+    this.settingsService.toggleStatus.subscribe(toggle => this.toggleOpen = toggle)
   }
 
-  logout() {
-    this.auth.signOut()
+  setTheme(theme: string) {
+    this.theme = 'scorpion-theme-' + theme;
+    this.settingsService.changeTheme(this.theme);
   }
 
   toggleSidebar() {
-    console.log(this.toggleOpen);
     this.toggleOpen = !this.toggleOpen;
-    // this.toggleEvent.emit(this.toggleOpen);
-    this.sb.toggle(this.toggleOpen);
+    this.settingsService.toggle(this.toggleOpen);
+  }
+
+  getDisplayName() {
+    this.auth.user.subscribe(user => {
+      if (user) {
+        if (user['username']) {
+          this.user = user['username'];
+        } else {
+          this.user = user['firstName'] + ' ' + user['lastName'];
+        }
+      } else {
+        this.user = '';
+      }
+    })
+  }
+
+  login() {
+    this.router.navigateByUrl('/home');
+  }
+
+  logout() {
+    this.router.navigateByUrl('/login');
+    this.auth.signOut()
   }
 
 }

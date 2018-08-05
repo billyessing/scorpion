@@ -3,13 +3,13 @@
     headerPosition="above"
     (selectedTabChange)="updateTimePeriod($event)"
     style="margin-bottom: 2em;">
-    <mat-tab label="1 day" (tabClicked)="updateTimePeriod(value)"> </mat-tab>
-    <mat-tab label="5 days" (click)="updateTimePeriod(value)"> </mat-tab>
+    <mat-tab label="5 days" (tabClicked)="updateTimePeriod(value)"> </mat-tab>
     <mat-tab label="1 month" (click)="updateTimePeriod(value)"> </mat-tab>
     <mat-tab label="3 months" (click)="updateTimePeriod(value)"> </mat-tab>
     <mat-tab label="6 months" (click)="updateTimePeriod(value)"> </mat-tab>
     <mat-tab label="1 year" (click)="updateTimePeriod(value)"> </mat-tab>
     <mat-tab label="5 years" (click)="updateTimePeriod(value)"> </mat-tab>
+    <mat-tab label="1 day" (click)="updateTimePeriod(value)"> </mat-tab>
   </mat-tab-group>
   <div style="display: block">
     <canvas class="lineChart" id="lineChart"></canvas>

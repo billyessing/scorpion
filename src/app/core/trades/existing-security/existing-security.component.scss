@@ -12,18 +12,18 @@ img {
 }
 
 .security-box {
-  width: 140px;
+  width: 160px;
   border: 2px solid black;
   padding: 8px;
   font-weight: lighter;
   // margin: 8px 0;
-  height: 86px;
+  height: 106px;
   margin-right:4em
 }
 
 .security-box:hover {
   color: white;
-  background-color: rgba(0,31,63,1);
+  background-color: rgba(211,211,211,0.3);
   cursor: pointer;
 }
 

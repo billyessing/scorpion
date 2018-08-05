@@ -66,7 +66,7 @@ import { LoginComponent } from './core/pages/login/login.component';
 
 // Services
 import { FirestoreService } from './shared/services/firestore.service';
-import { SidebarService } from './shared/components/sidebar/sidebar.service';
+import { SettingsService } from './shared/services/settings.service';
 
 // Other
 import { environment } from '../environments/environment';
@@ -143,7 +143,8 @@ import { SidebarComponent } from './shared/components/sidebar/sidebar.component'
     AuthModule,
   ],
   providers: [
-    FirestoreService, SidebarService
+    FirestoreService,
+    SettingsService
   ],
   bootstrap: [
     AppComponent

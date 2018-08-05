@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import {MatSidenav} from '@angular/material/sidenav';
-
+import { MatSidenav } from '@angular/material/sidenav';
+import { SettingsService } from './shared/services/settings.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,32 +11,33 @@ import {MatSidenav} from '@angular/material/sidenav';
 })
 export class AppComponent implements OnInit {
 
-  @ViewChild('sidenav') sidenav: MatSidenav;
-
   title = 'app';
-  theme = 'scorpion-theme-light';
+
+  theme: string;
 
   constructor(
-    private overlayContainer: OverlayContainer
+    private overlayContainer: OverlayContainer,
+    private settingsService: SettingsService
   ) { }
 
   ngOnInit() {
-    this.overlayContainer.getContainerElement().classList.add(this.theme);
+    this.onThemeChange();
   }
 
-  onThemeChange(theme: string) {
-    this.theme = theme;
-    //console.log(theme);
-    const overlayContainerClasses = this.overlayContainer.getContainerElement().classList;
-    const themeClassesToRemove = Array.from(overlayContainerClasses).filter((item: string) => item.includes('-theme'));
-    if (themeClassesToRemove.length) {
-       overlayContainerClasses.remove(...themeClassesToRemove);
-    }
-    overlayContainerClasses.add(theme);
+  onThemeChange() {
+    this.settingsService.themeSetting.subscribe(theme => {
+      let overlayContainer = this.overlayContainer.getContainerElement().classList;
+      // need to keep the first DOM token (cdk-overlay-container)
+      // because it is required for overlay containers to be usable
+      // (doesn't have any effect on style)
+      this.overlayContainer.getContainerElement().classList.remove(overlayContainer[1]);
+      this.overlayContainer.getContainerElement().classList.add(theme);
+      this.theme = theme
+    });
   }
 
-  close() {
-    this.sidenav.close();
+  closeSidebar() {
+    this.settingsService.toggle(false);
   }
 
 }

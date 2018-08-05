@@ -84,16 +84,22 @@ export class FirestoreService {
       return firebase.firestore.FieldValue.serverTimestamp()
   }
 
-  set<T>(ref: DocPredicate<T>, data: any) {
+  set<T>(ref: DocPredicate<T>, data: any, timestampUpdate?: boolean) {
     const timestamp = this.timestamp
-    return this.doc(ref).set({
-      ...data,
-      updatedAt: new Date(),
-      createdAt: timestamp
-    })
+    if (timestampUpdate) {
+      return this.doc(ref).set({
+        ...data,
+        updatedAt: new Date(),
+        createdAt: timestamp
+      })
+    } else {
+      return this.doc(ref).set({
+        ...data
+      })
+    }
   }
 
-  update<T>(ref: DocPredicate<T>, data: any, timestampUpdate: boolean) {
+  update<T>(ref: DocPredicate<T>, data: any, timestampUpdate?: boolean) {
     if (timestampUpdate) {
       return this.doc(ref).update({
         ...data,

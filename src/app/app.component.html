@@ -1,7 +1,7 @@
 <div [class]="theme">
   <app-header></app-header>
   <app-sidebar></app-sidebar>
-  <mat-sidenav-container class="example-container" (backdropClick)="close()">
+  <mat-sidenav-container class="page-content" (click)="closeSidebar()">
     <mat-sidenav-content>
       <div class="container">
         <router-outlet></router-outlet>
