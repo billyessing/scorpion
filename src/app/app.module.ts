@@ -75,6 +75,7 @@ import { CompareDirective } from './core/pages/signup/compare.directive';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { SignupComponent } from './core/pages/signup/signup.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { FriendsComponent } from './core/pages/friends/friends.component';
 
 
 @NgModule({
@@ -95,7 +96,8 @@ import { SidebarComponent } from './shared/components/sidebar/sidebar.component'
     SignupComponent,
     CdkDetailRowDirective,
     CompareDirective,
-    SidebarComponent
+    SidebarComponent,
+    FriendsComponent
   ],
   imports: [
     BrowserModule,

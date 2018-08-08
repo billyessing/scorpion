@@ -64,21 +64,25 @@ export class SecurityDataService {
     let url = this.getUrl(code, timePeriod, outputSize);
     let timeSeries = timeSeriesHeader[timePeriod];
 
-    return this.http.get(url)
-      .pipe(
-        map(data => {
-          let keys = data[timeSeries][Object.keys(data[timeSeries])[0]];
+    return this.http.get(url).pipe(
+      map(data => {
+        let keys = data[timeSeries][Object.keys(data[timeSeries])[0]];
 
-          this.securityData.open = keys[securityEnum.open];
-          this.securityData.high = keys[securityEnum.high];
-          this.securityData.low = keys[securityEnum.low];
-          this.securityData.close = keys[securityEnum.close];
-          this.securityData.volume = keys[securityEnum.volume];
+        this.securityData.open = keys[securityEnum.open];
+        this.securityData.high = keys[securityEnum.high];
+        this.securityData.low = keys[securityEnum.low];
+        this.securityData.close = keys[securityEnum.close];
+        this.securityData.volume = keys[securityEnum.volume];
 
-          return this.securityData;
-      },
-      err => console.log("sds.getSecurityData() could not fetch data...")
-    ))
+        return this.securityData;
+      }
+    ),
+    // delay(2000)
+    )
+    .catch(() => {
+      console.log("sds.getSecurityData() could not fetch data...");
+      return [];
+    })
   }
 
   getHistoricalSecurityData(code: string, timePeriod: string) {
@@ -88,8 +92,8 @@ export class SecurityDataService {
     let url = this.getUrl(code, timeSeries, outputSize);
     let timeFreq = timeSeriesHeader[timeSeries];
 
-    return this.http.get(url)
-      .map(data => {
+    return this.http.get(url).pipe(
+      map(data => {
         let keys = Object.keys(data[timeFreq]);
         let keysReq = this.getTimePeriod(keys, timePeriod);
 
@@ -126,9 +130,12 @@ export class SecurityDataService {
         this.securityPriceHistory.dates = dates;
 
         return this.securityPriceHistory;
-      },
-      err => console.log("sds.getHistoricalSecurityData() could not fetch data...")
-    )
+      }
+    ))
+    .catch(() => {
+      console.log("sds.getHistoricalSecurityData() could not fetch data...")
+      return [];
+    })
   }
 
   getTimePeriod(keys: string[], timePeriod: string): string[] {

@@ -43,7 +43,9 @@ export class PieChartComponent implements OnInit {
   }
 
   getPieChartData(pieChartType: string) {
-    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
+    let ctx = document.getElementById(pieChartType);
+
+    this.db.col$<Security>(`user_holdings/${this.user.uid}/holdings`)
       .subscribe(col => {
 
         let securityLabels: string[] = [];
@@ -64,7 +66,6 @@ export class PieChartComponent implements OnInit {
           }
         })
 
-        let ctx = document.getElementById(pieChartType);
         pieChartType = new Chart(ctx, {
           type: 'doughnut',
           data: {

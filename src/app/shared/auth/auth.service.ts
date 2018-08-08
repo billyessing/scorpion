@@ -30,7 +30,7 @@ export class AuthService {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          return this.afs.doc<User>(`user_details/${user.uid}`).valueChanges();
         } else {
           return of(null);
         }
@@ -118,28 +118,27 @@ export class AuthService {
 
   // Sets user data to firestore after succesful login
   private updateUserData(user, userDetails?) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`user_details/${user.uid}`);
 
-    let firstName = null;
-    let lastName = null;
-    let username = null;
+    let data: User
 
-    // social login
-    if (user.displayName) {
-      username = user.displayName;
-    // email login
-    } else if (userDetails) {
-      firstName = userDetails.firstNameFormCtrl;
-      lastName = userDetails.lastNameFormCtrl;
-      username = userDetails.usernameFormCtrl;
-    }
+    // in case user changes social credentials
+    if (!userDetails) {
+      data = {
+        uid: user.uid,
+        email: user.email,
+        username: user.displayName
+      }
 
-    const data: User = {
-      uid: user.uid,
-      email: user.email,
-      firstName: firstName,
-      lastName: lastName,
-      username: username
+    // email signup
+    } else {
+      data = {
+        uid: user.uid,
+        email: user.email,
+        firstName: userDetails.firstNameFormCtrl,
+        lastName: userDetails.lastNameFormCtrl,
+        username: userDetails.usernameFormCtrl
+      }
     }
 
     return userRef.set(data, { merge: true })

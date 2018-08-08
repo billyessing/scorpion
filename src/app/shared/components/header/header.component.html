@@ -28,10 +28,11 @@
             <i class="fa fa-cog fa-lg nav-icons" style="color: white;"></i>
           </span>
           <mat-menu #menu="matMenu" [overlapTrigger]="false">
-            <button mat-menu-item class="menu-item" style="padding-top: 10px;" (click)="setTheme('light')">
+            <div style="margin-bottom: 19px"> </div>
+            <button mat-menu-item class="menu-item" (click)="setTheme('light')">
               <i class="fa fa-sun-o" style="margin-right: 5px;"></i> Light mode
             </button>
-            <button mat-menu-item class="menu-item" style="padding-top: -4px;" (click)="setTheme('dark')">
+            <button mat-menu-item class="menu-item" (click)="setTheme('dark')">
               <i class="fa fa-moon-o" style="margin-right: 5px;"></i> Nightshade
             </button>
             <hr style="margin-left: 0.6em; margin-right: 0.6em; background-color: grey">

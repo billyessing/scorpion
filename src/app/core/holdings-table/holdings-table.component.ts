@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource, MatSortable } from '@angular
 
 import 'rxjs/Rx';
 import { map, take, tap, filter, scan, switchMap } from 'rxjs/operators';
-import { Observable, Observer, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
+import { Observable, Observer, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent, forkJoin } from 'rxjs';
 
 import { ExistingSecurityComponent } from './../trades/existing-security/existing-security.component';
 import { FirestoreService } from './../../shared/services/firestore.service';
@@ -51,7 +51,7 @@ export class HoldingsTableComponent implements OnInit {
   }
 
   getPortfolio() {
-    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
+    this.db.col$<Security>(`user_holdings/${this.user.uid}/holdings`)
       .subscribe(data => {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.sort = this.sort;
@@ -76,38 +76,56 @@ export class HoldingsTableComponent implements OnInit {
   }
 
   // uses security data api to fetch real time data
-  // getSecurityData() {
-  //   this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
-  //     .subscribe(col => {
-  //       col.forEach(security => {
-  //         // checks if last price is undefined or null
-  //         // i.e. if the stock was just added
-  //         if (security.lastPrice == null) {
-  //           // console.log(security.code);
-  //           this.securityData.getSecurityData(security.code)
-  //             .subscribe(data => {
-  //               return this.updateSecurity(security, data)
-  //             },
-  //             err => console.log('ERROR: failed to retrieve data for ' + security.code),
-  //             () => console.log('successful for: ' + security.code)
-  //           )
-  //         }
-  //       })
-  //     })
-  // }
+  /*
+  getSecurityData() {
+    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
+      .subscribe(col => {
+        col.forEach(security => {
+          // checks if last price is undefined or null
+          // i.e. if the stock was just added
+          if (security.lastPrice == null) {
+            // console.log(security.code);
+            this.securityData.getSecurityData(security.code)
+              .subscribe(data => {
+                return this.updateSecurity(security, data)
+              },
+              err => console.log('ERROR: failed to retrieve data for ' + security.code),
+              () => console.log('successful for: ' + security.code)
+            )
+          }
+        })
+      })
+  }
+  */
+
+  /*
+  getSecurityData() {
+    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
+      .subscribe(holdings => {
+        holdings.forEach(holding => {
+          forkJoin(this.securityData.getSecurityData(holding.code))
+          .subscribe(data => {
+            console.log(data);
+            this.updateSecurity(holding, data);
+          })
+        })
+      })
+  }
+  */
+
 
   // simplifed attempt of above
   // still doesn't work right
   getSecurityData() {
-    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
-      .switchMap(col => {
+    this.db.col$<Security>(`user_holdings/${this.user.uid}/holdings`)
+      .flatMap(col => {
         return col;
       })
       .subscribe(security => {
         if (security.lastPrice == null) {
           this.securityData.getSecurityData(security.code)
             .subscribe(data => {
-              console.log(data)
+              console.log(security.code);
               this.updateSecurity(security, data);
             });
         }
@@ -127,7 +145,7 @@ export class HoldingsTableComponent implements OnInit {
     let gain = ((lastPrice - security.purchasePrice) * security.volume)
     let gainAsPercentage = ((gain) * 100 / (security.purchasePrice * security.volume))
 
-    this.db.update<Security>(`users_data/${this.user.uid}/holdings/${security.code}`, ({
+    this.db.update<Security>(`user_holdings/${this.user.uid}/holdings/${security.code}`, ({
       lastPrice: Number(lastPrice),
       open: Number(open),
       high: Number(high),

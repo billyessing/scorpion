@@ -42,7 +42,7 @@ export class AddSecurityComponent implements OnInit {
       updatedAt: new Date()
     }
 
-    this.db.set<Security>(`users_data/${this.user.uid}/holdings/${securityDetails.code}`, securityDetails);
+    this.db.set<Security>(`user_holdings/${this.user.uid}/holdings/${securityDetails.code}`, securityDetails);
     this.dialogRef.close();
 
     this.openSnackBar(securityDetails);

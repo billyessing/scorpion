@@ -28,10 +28,10 @@ export class SettingsService {
     // update user preference
     this.user = firebase.auth().currentUser;
     if (this.user) {
-      this.db.update(`users_data/${this.user.uid}/settings/theme_setting`, {theme: themeChange})
+      this.db.update(`user_settings/${this.user.uid}`, {theme: themeChange})
         .catch(() => {
           // new user...
-          this.db.set(`users_data/${this.user.uid}/settings/theme_setting`, {theme: themeChange});
+          this.db.set(`user_settings/${this.user.uid}`, {theme: themeChange});
         })
     }
   }

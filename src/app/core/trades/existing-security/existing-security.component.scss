@@ -12,17 +12,15 @@ img {
 }
 
 .security-box {
-  width: 160px;
+  width: 300px;
   border: 2px solid black;
   padding: 8px;
   font-weight: lighter;
-  // margin: 8px 0;
-  height: 106px;
-  margin-right:4em
+  height: 90px;
+  margin-right: 50px;
 }
 
 .security-box:hover {
-  color: white;
   background-color: rgba(211,211,211,0.3);
   cursor: pointer;
 }
@@ -37,4 +35,12 @@ img {
   font-size: 8px;
   opacity: 0.5;
   line-height: normal;
+}
+
+.gains-class-positive {
+  color:rgba(75,181,67,0.9);
+}
+
+.gains-class-negative {
+  color:rgba(255,0,0,0.7);
 }

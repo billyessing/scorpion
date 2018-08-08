@@ -32,38 +32,12 @@ export class HomeComponent implements OnInit {
   applyUserSettings() {
     this.user = firebase.auth().currentUser;
 
-    this.db.doc$(`users_data/${this.user.uid}/settings/theme_setting`)
+    this.db.doc$(`user_settings/${this.user.uid}`)
       .subscribe(theme => {
         if (theme) {
           this.settingsService.changeTheme(theme['theme']);
         }
     })
   }
-
-  // private updateUserData(user, userDetails?) {
-  //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-  //
-  //   let firstName = null;
-  //   let lastName = null;
-  //   let username = null;
-  //
-  //   if (user.username) {
-  //     username = user.username;
-  //   } else if (userDetails) {
-  //     firstName = userDetails.firstNameFormCtrl;
-  //     lastName = userDetails.lastNameFormCtrl;
-  //     username = userDetails.usernameFormCtrl;
-  //   }
-  //
-  //   const data: User = {
-  //     uid: user.uid,
-  //     email: user.email,
-  //     firstName: user.firstName == null ? null : firstName,
-  //     lastName: user.lastName == null ? null : lastName,
-  //     username: username
-  //   }
-  //
-  //   return userRef.set(data, { merge: true })
-  // }
 
 }
