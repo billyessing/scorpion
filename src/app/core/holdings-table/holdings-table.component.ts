@@ -1,17 +1,17 @@
-import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild, Input } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatPaginator, MatSort, MatTableDataSource, MatSortable } from '@angular/material';
 
-import 'rxjs/Rx';
-import { map, take, tap, filter, scan, switchMap } from 'rxjs/operators';
-import { Observable, Observer, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map, take, filter, scan, delay, throttleTime } from 'rxjs/operators';
 
 import { ExistingSecurityComponent } from './../trades/existing-security/existing-security.component';
 import { FirestoreService } from './../../shared/services/firestore.service';
 import { SecurityDataService } from './../../shared/services/security-data.service';
-import { Security } from './../../shared/models/security.model';
 import { AuthService } from './../../shared/auth/auth.service';
-import * as firebase from 'firebase/app'
+import { Security } from './../../shared/models/security.model';
+import { User } from './../../shared/models/user.model';
+
 
 @Component({
   selector: 'app-holdings-table',
@@ -27,113 +27,95 @@ import * as firebase from 'firebase/app'
 })
 export class HoldingsTableComponent implements OnInit {
 
-  user: firebase.User;
+  @Input() user: Observable<User>;
+  username: string;
 
   dataSource: MatTableDataSource<Security>;
   displayedColumns = ['code', 'purchasePrice', 'lastPrice', 'volume', 'value', 'gain', 'gainAsPercentage', 'updatedAt'];
-  dateString: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  totalVolume = 0;
+  totalValue = 0;
+  totalGain = 0;
+  totalGainAsPercentage = 0;
+
   constructor(
     private db: FirestoreService,
-    private securityData: SecurityDataService,
+    private sds: SecurityDataService,
     private auth: AuthService
   ) { }
 
   ngOnInit() {
-    this.user = firebase.auth().currentUser;
-
-    this.getPortfolio();
-    this.getSecurityData();
+    this.getUserData();
     this.preSort();
   }
 
-  getPortfolio() {
-    this.db.col$<Security>(`user_holdings/${this.user.uid}/holdings`)
-      .subscribe(data => {
-        this.dataSource = new MatTableDataSource(data);
+  getUserData() {
+    if (!this.user) {
+      this.auth.user.subscribe(user => {
+        if (user) {
+          this.getPortfolio(user.uid);
+        }
+      });
+    }
+
+    // view another users profile
+    else {
+      this.user.subscribe(userDetails => {
+        this.username = userDetails[0].username;
+        this.getPortfolio(userDetails[0].uid);
+      });
+    }
+  }
+
+  getPortfolio(uid: string) {
+    this.db.col$<Security>(`user_holdings/${uid}/holdings`)
+      .take(1)
+      .subscribe(holdings => {
+        return this.updatePortfolio(uid, holdings);
+      })
+
+  }
+
+  updatePortfolio(uid: string, holdings) {
+    holdings.forEach(security => {
+      this.sds.getSecurityData(security.code)
+        .subscribe(updatedData => {
+          this.updateSecurity(uid, security, updatedData)
+        })
+
+      this.totalVolume += security.volume;
+      this.totalValue += security.value;
+      this.totalGain += security.gain;
+      this.totalGainAsPercentage =
+        ((this.totalValue - (this.totalValue - this.totalGain)) * 100) / (this.totalValue - this.totalGain);
+
+      // TODO: is there a less expensive way of doing this
+      this.fillTable(uid)
+    })
+
+    this.updatePerformance(uid, ({
+      volume: this.totalVolume,
+      value: this.totalValue,
+      gain: this.totalGain,
+      gainAsPercentage: this.totalGainAsPercentage
+    }));
+  }
+
+  fillTable(uid) {
+    this.db.col$<Security>(`user_holdings/${uid}/holdings`)
+      .take(1)
+      .subscribe(holdings => {
+        this.dataSource = new MatTableDataSource(holdings);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
       })
   }
 
-  // presort table by last updated
-  preSort() {
-    this.sort.sort(<MatSortable>{
-        id: 'updatedAt',
-        start: 'desc'
-      }
-    );
-  }
-
-  // holdings table search bar
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
-  }
-
-  // uses security data api to fetch real time data
-  /*
-  getSecurityData() {
-    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
-      .subscribe(col => {
-        col.forEach(security => {
-          // checks if last price is undefined or null
-          // i.e. if the stock was just added
-          if (security.lastPrice == null) {
-            // console.log(security.code);
-            this.securityData.getSecurityData(security.code)
-              .subscribe(data => {
-                return this.updateSecurity(security, data)
-              },
-              err => console.log('ERROR: failed to retrieve data for ' + security.code),
-              () => console.log('successful for: ' + security.code)
-            )
-          }
-        })
-      })
-  }
-  */
-
-  /*
-  getSecurityData() {
-    this.db.col$<Security>(`users_data/${this.user.uid}/holdings`)
-      .subscribe(holdings => {
-        holdings.forEach(holding => {
-          forkJoin(this.securityData.getSecurityData(holding.code))
-          .subscribe(data => {
-            console.log(data);
-            this.updateSecurity(holding, data);
-          })
-        })
-      })
-  }
-  */
-
-
-  // simplifed attempt of above
-  // still doesn't work right
-  getSecurityData() {
-    this.db.col$<Security>(`user_holdings/${this.user.uid}/holdings`)
-      .flatMap(col => {
-        return col;
-      })
-      .subscribe(security => {
-        if (security.lastPrice == null) {
-          this.securityData.getSecurityData(security.code)
-            .subscribe(data => {
-              console.log(security.code);
-              this.updateSecurity(security, data);
-            });
-        }
-      })
-  }
-
   // update data in firestore
-  updateSecurity(security: Security, securityData: {}) {
+  updateSecurity(uid: string, security: Security, securityData: any) {
     let open = securityData['open'];
     let high = securityData['high'];
     let low = securityData['low'];
@@ -145,7 +127,7 @@ export class HoldingsTableComponent implements OnInit {
     let gain = ((lastPrice - security.purchasePrice) * security.volume)
     let gainAsPercentage = ((gain) * 100 / (security.purchasePrice * security.volume))
 
-    this.db.update<Security>(`user_holdings/${this.user.uid}/holdings/${security.code}`, ({
+    this.db.update<Security>(`user_holdings/${uid}/holdings/${security.code}`, ({
       lastPrice: Number(lastPrice),
       open: Number(open),
       high: Number(high),
@@ -155,5 +137,24 @@ export class HoldingsTableComponent implements OnInit {
       gain: Number(gain),
       gainAsPercentage: Number(gainAsPercentage)
     }));
+  }
+
+  updatePerformance(uid: string, performance: any) {
+    this.db.set(`user_performance/${uid}`, { performance });
+  }
+
+  // presort table by last updated
+  preSort() {
+    this.sort.sort(<MatSortable>{
+      id: 'updatedAt',
+      start: 'desc'
+    });
+  }
+
+  // holdings table search bar
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 }

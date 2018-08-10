@@ -1,6 +1,8 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { FirestoreService } from './../../../shared/services/firestore.service';
+import { AuthService } from './../../../shared/auth/auth.service';
 import { Security } from './../../../shared/models/security.model';
+import { User }  from './../../../shared/models/user.model';
 import { Chart } from 'chart.js';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs'
@@ -13,7 +15,8 @@ import * as firebase from 'firebase/app'
 })
 export class PieChartComponent implements OnInit {
 
-  user: firebase.User;
+  // user: firebase.User;
+  @Input() user: Observable<User>;
 
   pieChartSecurities = []
   pieChartIndustries = []
@@ -33,19 +36,42 @@ export class PieChartComponent implements OnInit {
     'rgba(0, 0, 128, 0.5)'
   ]
 
-  constructor(private db: FirestoreService) { }
+  constructor(
+    private db: FirestoreService,
+    private auth: AuthService
+  ) { }
 
   ngOnInit() {
-    this.user = firebase.auth().currentUser;
-
-    this.getPieChartData('pieChartSecurities');
-    this.getPieChartData('pieChartIndustries');
+    this.getUserData();
   }
 
-  getPieChartData(pieChartType: string) {
+  getUserData() {
+    let uid: string;
+
+    if (!this.user) {
+      this.auth.user.subscribe(user => {
+        if (user) {
+          uid = user.uid
+          this.getPieChartData(uid, 'pieChartSecurities');
+          this.getPieChartData(uid, 'pieChartIndustries');
+        }
+      });
+    }
+
+    // view another users profile
+    else {
+      this.user.subscribe(userDetails => {
+        uid = userDetails[0].uid;
+        this.getPieChartData(uid, 'pieChartSecurities');
+        this.getPieChartData(uid, 'pieChartIndustries');
+      });
+    }
+  }
+
+  getPieChartData(uid: string, pieChartType: string) {
     let ctx = document.getElementById(pieChartType);
 
-    this.db.col$<Security>(`user_holdings/${this.user.uid}/holdings`)
+    this.db.col$<Security>(`user_holdings/${uid}/holdings`)
       .subscribe(col => {
 
         let securityLabels: string[] = [];

@@ -1,0 +1,6 @@
+<div *ngIf="user" class="holdings-header">{{ username }}'s portfolio</div>
+<div class="add-user"><button  mat-raised-button (click)="onAdd()">+&nbsp;ADD USER</button></div>
+<br><br>
+<app-holdings-table [user]="user"></app-holdings-table>
+<hr>
+<app-pie-chart [user]="user"></app-pie-chart>

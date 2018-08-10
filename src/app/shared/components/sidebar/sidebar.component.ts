@@ -19,8 +19,8 @@ export class SidebarComponent implements OnInit {
     this.settingsService.toggleStatus.subscribe(toggle => this.toggleOpen = toggle);
   }
 
-  test() {
-    console.log('test');
-  }
+  // test() {
+  //   console.log('test');
+  // }
 
 }

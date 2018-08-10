@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { FirestoreService } from './../../../shared/services/firestore.service';
+import { AuthService } from './../../../shared/auth/auth.service';
 import { SecurityInfoComponent } from './../../pages/security-info/security-info.component'
 import { Security } from './../../../shared/models/security.model';
 import * as firebase from 'firebase/app'
@@ -23,14 +24,13 @@ export class AddSecurityComponent implements OnInit {
 
   constructor(
     private db: FirestoreService,
+    private auth: AuthService,
     public snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<AddSecurityComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
-  ngOnInit() {
-    this.user = firebase.auth().currentUser;
-  }
+  ngOnInit() {  }
 
   onConfirm(): void {
     let securityDetails = {
@@ -42,7 +42,11 @@ export class AddSecurityComponent implements OnInit {
       updatedAt: new Date()
     }
 
-    this.db.set<Security>(`user_holdings/${this.user.uid}/holdings/${securityDetails.code}`, securityDetails);
+    this.auth.user
+      .subscribe(user => {
+        this.db.set<Security>(`user_holdings/${user.uid}/holdings/${securityDetails.code}`, securityDetails);
+      })
+
     this.dialogRef.close();
 
     this.openSnackBar(securityDetails);

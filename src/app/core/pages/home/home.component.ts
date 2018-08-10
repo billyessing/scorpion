@@ -8,7 +8,7 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import * as firebase from 'firebase/app'
 import { map, take, tap, filter, scan, switchMap } from 'rxjs/operators';
 import { Observable, Observer, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
-
+import { User } from './../../../shared/models/user.model';
 
 @Component({
   selector: 'app-home',
@@ -17,8 +17,6 @@ import { Observable, Observer, Subject, asapScheduler, pipe, of, from, interval,
 })
 export class HomeComponent implements OnInit {
 
-  user: firebase.User;
-
   constructor(
     private auth: AuthService,
     private settingsService: SettingsService,
@@ -26,13 +24,18 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.applyUserSettings();
+    this.auth.user
+      .subscribe(user => {
+        if (user) {
+          this.applyUserSettings(user.uid);
+        }
+    });
   }
 
-  applyUserSettings() {
-    this.user = firebase.auth().currentUser;
-
-    this.db.doc$(`user_settings/${this.user.uid}`)
+  // TODO: on refresh theme reverts back to deafault
+  // if user is on a different page
+  applyUserSettings(uid: string) {
+    this.db.doc$(`user_settings/${uid}`)
       .subscribe(theme => {
         if (theme) {
           this.settingsService.changeTheme(theme['theme']);

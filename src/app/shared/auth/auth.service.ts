@@ -123,7 +123,7 @@ export class AuthService {
     let data: User
 
     // in case user changes social credentials
-    if (!userDetails) {
+    if (user.displayName) {
       data = {
         uid: user.uid,
         email: user.email,
@@ -131,13 +131,20 @@ export class AuthService {
       }
 
     // email signup
-    } else {
+    } else if (userDetails) {
       data = {
         uid: user.uid,
         email: user.email,
         firstName: userDetails.firstNameFormCtrl,
         lastName: userDetails.lastNameFormCtrl,
         username: userDetails.usernameFormCtrl
+      }
+    }
+
+    else {
+      data = {
+        uid: user.uid,
+        email: user.email
       }
     }
 

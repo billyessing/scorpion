@@ -14,8 +14,6 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 })
 export class SecurityInfoComponent implements OnInit {
 
-  theme = 'scorpion-theme-dark';
-
   timePeriod: string;
 
   securityCode: string;

@@ -10,7 +10,7 @@
           <span>{{ securityCode.toUpperCase() }}</span>
         </div>
         <mat-card-actions>
-          <button class="add-button" mat-button style="margin-left: 35px;" (click)="openDialog()">+  ADD TO PORTFOLIO</button>
+          <button class="add-button" mat-raised-button style="margin-left: 35px;" (click)="openDialog()">+&nbsp;ADD TO PORTFOLIO</button>
         </mat-card-actions>
       </div>
 
@@ -22,7 +22,7 @@
             <span class="company-industry">Industry: {{ companyIndustry }}</span>
           </div>
           <div class="col-md-6">
-            <span class="security-price" style="font-size:28px;">${{ securityClose | number:'1.2-2' }} AUD</span>
+            <span class="security-price" style="font-size:30px;">${{ securityClose | number:'1.2-2' }} AUD</span>
             <br>
             <span
               [ngClass]="{'gains-class-positive' : securityClose - securityOpen > 0,

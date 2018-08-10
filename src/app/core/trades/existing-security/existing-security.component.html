@@ -8,11 +8,12 @@
     <div clas="col-md-4">
       <div class="security-box" routerLink="/share/{{security.code.toLowerCase()}}" routerLinkActive="active">
         <span class="security-name">{{ security.companyName }}</span>
-        <!-- <br>
-        <span class="security-industry">{{ security.industry }}</span> -->
         <div>
-          <span class="security-price" style="font-size:22px; padding-right: 10px; opacity: 0.5;">${{ security.lastPrice | number:'1.2-2' }} AUD &nbsp;&nbsp; /</span>
-          <!-- <br> -->
+          <span
+            class="security-price"
+            style="font-size:22px; padding-right: 10px; opacity: 0.5;">
+            ${{ security.lastPrice | number:'1.2-2' }} AUD &nbsp;&nbsp; /
+          </span>
           <span
             [ngClass]="{'gains-class-positive' : security.lastPrice - security.open > 0,
                         'gains-class-negative' : security.lastPrice - security.open < 0}">

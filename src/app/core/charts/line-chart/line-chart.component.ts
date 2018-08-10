@@ -22,9 +22,9 @@ export class LineChartComponent implements OnInit {
 
   @Input() securityCode: string;
 
-  lineChart: any;
   // default value
   timePeriod: string = '5days';
+  lineChart: any;
 
   constructor(
     private securityService: SecurityDataService,

@@ -1,0 +1,40 @@
+.friends-header {
+  margin-top: 50px;
+  margin-bottom: 40px;
+  font-weight: medium;
+  font-size: 40px;
+  text-align: center;
+}
+
+.friends {
+  // display: inline-block;
+  // text-align: center;
+  width: 100%;
+  display: table;
+  margin: 0 auto;
+  // margin-left: 10%;
+  // margin-right: 10%;
+}
+
+mat-card {
+  float: left;
+  width: 300px;
+  height: 220px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 30px;
+}
+
+mat-card:hover {
+  cursor: pointer;
+  background-color: lightgrey;
+  // overflow: hidden;
+}
+
+.gains-class-positive {
+  color:rgba(75,181,67,0.9);
+}
+
+.gains-class-negative {
+  color:rgba(255,0,0,0.7);
+}

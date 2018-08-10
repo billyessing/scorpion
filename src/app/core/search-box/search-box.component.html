@@ -1,17 +1,16 @@
-<form style="margin-top: 50px;" (ngSubmit)="navigateToUrl()">
+<form style="margin-top: 100px;" (ngSubmit)="navigateToUrl()">
   <mat-form-field>
     <input
       class="search"
       type="text"
-      placeholder="Search for company..."
+      [placeholder]="placeholder"
       matInput
-      type="text"
       [matAutocomplete]="auto"
-      [formControl]="companySearchControl"
+      [formControl]="formSearchControl"
       color="black">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option *ngFor="let company of filteredOptions | async" [value]="company">
-        {{ company }}
+      <mat-option *ngFor="let search of filteredOptions | async" [value]="search">
+        {{ search }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

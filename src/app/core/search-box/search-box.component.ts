@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CsvParserService } from './../../shared/services/csv-parser.service';
+import { FirestoreService } from './../../shared/services/firestore.service';
+import { User } from './../../shared/models/user.model';
 
 @Component({
   selector: 'app-search-box',
@@ -12,42 +14,84 @@ import { CsvParserService } from './../../shared/services/csv-parser.service';
 })
 export class SearchBoxComponent implements OnInit {
 
-  companySearchControl = new FormControl();
+  @Input() searchParameter: string;
+
+  placeholder: string;
+  formSearchControl = new FormControl();
+
   filteredOptions: Observable<any[]>;
 
   constructor(
     private csvService: CsvParserService,
-    private router: Router) { }
+    private router: Router,
+    private db: FirestoreService
+  ) { }
 
 
   ngOnInit() {
-    this.filterOptions();
+    this.setPlaceholder();
+    this.filterOptions(this.searchParameter);
+  }
+
+  setPlaceholder() {
+    this.searchParameter == 'filterFriends' ? this.placeholder = 'Search users...' : this.placeholder = 'Search for company...'
   }
 
   navigateToUrl() {
-    let companyName = this.companySearchControl.value.toLowerCase();
-    let companyCode = companyName.slice(-4, -1);
-    this.router.navigateByUrl('/share/' + companyCode);
+    // search securities
+    if (this.searchParameter == 'filterSecurities') {
+      let companyName = this.formSearchControl.value.toLowerCase();
+      let companyCode = companyName.slice(-4, -1);
+      this.router.navigateByUrl('/share/' + companyCode);
+    }
+
+    // search friends
+    else if (this.searchParameter == 'filterFriends') {
+      let username = this.formSearchControl.value;
+      this.router.navigateByUrl('/view-profile/' + username);
+    }
   }
 
-  filterOptions() {
-    this.filteredOptions = this.companySearchControl.valueChanges
-      .pipe(
-        startWith(null),
-        debounceTime(100),
-        distinctUntilChanged(),
-        switchMap(val => {
-          return this.filter(val || '')
-        })
-      )
+  filterOptions(searchParameter: string) {
+    this.filteredOptions = this.formSearchControl.valueChanges.pipe(
+      startWith(null),
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(val => {
+        if (searchParameter == 'filterFriends') {
+          return this.filterFriends(val || '');
+        } else if (searchParameter == 'filterSecurities') {
+          return this.filterSecurities(val || '');
+        }
+      })
+    )
   }
 
-  filter(value: string): Observable<any[]> {
-    return this.csvService.getNamesWithCodes()
-      .pipe(map(res => res.filter(option => {
+  filterSecurities(value: string): Observable<any[]> {
+    return this.csvService.getNamesWithCodes().pipe(
+      map(res => res.filter(option => {
         return option.toLowerCase().includes(value)
       }))
     )
+  }
+
+  // TODO: ignore self within search
+  filterFriends(value: string): Observable<any[]> {
+    return this.db.col$(`user_details`).pipe(
+      map(userDetails => {
+        let users = JSON.parse(JSON.stringify(userDetails));
+        let usernames = []
+
+        users.forEach(user => {
+          usernames.push(user.username);
+        })
+
+        return usernames.filter(option => {
+          if (option) {
+            return option.toLowerCase().includes(value);
+          }
+        });
+      }))
   }
 
 }

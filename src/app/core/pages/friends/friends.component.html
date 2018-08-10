@@ -1,3 +1,29 @@
-<p>
-  friends works!
-</p>
+<app-search-box [searchParameter]="'filterFriends'"></app-search-box>
+<br>
+<hr>
+<div class="friends-header">Friends and groups</div>
+<div class="friends">
+  <div class="cards" *ngFor="let fp of friendsPerformance">
+
+    <mat-card>
+      <mat-card-title>{{ fp.username }}
+        <!-- <div class="emojis"> -->
+          <span *ngIf="fp.gain > 0" style="text-align: right;">🔥</span>
+          <span *ngIf="fp.gain < 0" style="text-align: right;">❄️</span>
+          <span *ngIf="fp.value > 1000" style="text-align: right;">💸</span>
+        <!-- </div> -->
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="fp.name">{{ fp.name }}</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="!fp.name">{{ fp.username }}</mat-card-subtitle>
+      <hr>
+      <span style="font-size: 20px; margin-bottom: 30px;">Value: ${{ fp.value | number:'1.2-2'}}</span>
+      <br>
+      Gain:
+      <span [ngClass]="{'gains-class-positive' : fp.gain > 0,
+                        'gains-class-negative' : fp.gain < 0}">
+        {{ fp.gain | number:'1.3-3' }} &nbsp;/&nbsp; ({{ fp.gainAsPercentage | number:'1.3-3' }}%)
+      </span>
+    </mat-card>
+
+  </div>
+</div>
